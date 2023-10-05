@@ -1,0 +1,308 @@
+[
+ {
+  "number": 1,
+  "line": "4호선",
+  "name": "오이도",
+  "distance": 0
+ },
+ {
+  "number": 2,
+  "line": "4호선",
+  "name": "정왕",
+  "distance": 2.1
+ },
+ {
+  "number": 3,
+  "line": "4호선",
+  "name": "신길온천",
+  "distance": 1.4
+ },
+ {
+  "number": 4,
+  "line": "4호선",
+  "name": "안산",
+  "distance": 2.9
+ },
+ {
+  "number": 5,
+  "line": "4호선",
+  "name": "초지",
+  "distance": 2.2
+ },
+ {
+  "number": 6,
+  "line": "4호선",
+  "name": "고잔",
+  "distance": 1.5
+ },
+ {
+  "number": 7,
+  "line": "4호선",
+  "name": "중앙",
+  "distance": 1.5
+ },
+ {
+  "number": 8,
+  "line": "4호선",
+  "name": "한대앞",
+  "distance": 1.4
+ },
+ {
+  "number": 9,
+  "line": "4호선",
+  "name": "상록수",
+  "distance": 7.2
+ },
+ {
+  "number": 10,
+  "line": "4호선",
+  "name": "반월",
+  "distance": 1.5
+ },
+ {
+  "number": 11,
+  "line": "4호선",
+  "name": "대야미",
+  "distance": 3.6
+ },
+ {
+  "number": 12,
+  "line": "4호선",
+  "name": "수리산",
+  "distance": 2
+ },
+ {
+  "number": 13,
+  "line": "4호선",
+  "name": "산본",
+  "distance": 2.6
+ },
+ {
+  "number": 14,
+  "line": "4호선",
+  "name": "금정",
+  "distance": 1.1
+ },
+ {
+  "number": 15,
+  "line": "4호선",
+  "name": "범계",
+  "distance": 2.3
+ },
+ {
+  "number": 16,
+  "line": "4호선",
+  "name": "평촌",
+  "distance": 1.3
+ },
+ {
+  "number": 17,
+  "line": "4호선",
+  "name": "인덕원",
+  "distance": 1.3
+ },
+ {
+  "number": 18,
+  "line": "4호선",
+  "name": "정부과천청사",
+  "distance": 1.6
+ },
+ {
+  "number": 19,
+  "line": "4호선",
+  "name": "과천",
+  "distance": 1
+ },
+ {
+  "number": 20,
+  "line": "4호선",
+  "name": "대공원",
+  "distance": 1
+ },
+ {
+  "number": 21,
+  "line": "4호선",
+  "name": "경마공원",
+  "distance": 0.9
+ },
+ {
+  "number": 22,
+  "line": "4호선",
+  "name": "선바위",
+  "distance": 1
+ },
+ {
+  "number": 23,
+  "line": "4호선",
+  "name": "남태령",
+  "distance": 1.9
+ },
+ {
+  "number": 24,
+  "line": "4호선",
+  "name": "사당",
+  "distance": 1.6
+ },
+ {
+  "number": 25,
+  "line": "4호선",
+  "name": "총신대입구(이수)",
+  "distance": 1.1
+ },
+ {
+  "number": 26,
+  "line": "4호선",
+  "name": "동작(현충원)",
+  "distance": 1.8
+ },
+ {
+  "number": 27,
+  "line": "4호선",
+  "name": "이촌(국립중앙박물관)",
+  "distance": 2.7
+ },
+ {
+  "number": 28,
+  "line": "4호선",
+  "name": "신용산",
+  "distance": 1.3
+ },
+ {
+  "number": 29,
+  "line": "4호선",
+  "name": "삼각지",
+  "distance": 0.7
+ },
+ {
+  "number": 30,
+  "line": "4호선",
+  "name": "숙대입구(갈월)",
+  "distance": 1.2
+ },
+ {
+  "number": 31,
+  "line": "4호선",
+  "name": "서울역",
+  "distance": 1
+ },
+ {
+  "number": 32,
+  "line": "4호선",
+  "name": "회현(남대문시장)",
+  "distance": 0.9
+ },
+ {
+  "number": 33,
+  "line": "4호선",
+  "name": "명동",
+  "distance": 0.7
+ },
+ {
+  "number": 34,
+  "line": "4호선",
+  "name": "충무로",
+  "distance": 0.7
+ },
+ {
+  "number": 35,
+  "line": "4호선",
+  "name": "동대문역사문화공원",
+  "distance": 1.3
+ },
+ {
+  "number": 36,
+  "line": "4호선",
+  "name": "동대문",
+  "distance": 0.7
+ },
+ {
+  "number": 37,
+  "line": "4호선",
+  "name": "혜화",
+  "distance": 1.5
+ },
+ {
+  "number": 38,
+  "line": "4호선",
+  "name": "한성대입구(삼선교)",
+  "distance": 0.9
+ },
+ {
+  "number": 39,
+  "line": "4호선",
+  "name": "성신여대입구(돈암)",
+  "distance": 0
+ },
+ {
+  "number": 40,
+  "line": "4호선",
+  "name": "길음",
+  "distance": 2.4
+ },
+ {
+  "number": 41,
+  "line": "4호선",
+  "name": "미아사거리",
+  "distance": 1.3
+ },
+ {
+  "number": 42,
+  "line": "4호선",
+  "name": "미아",
+  "distance": 1.5
+ },
+ {
+  "number": 43,
+  "line": "4호선",
+  "name": "수유(강북구청)",
+  "distance": 1.4
+ },
+ {
+  "number": 44,
+  "line": "4호선",
+  "name": "쌍문",
+  "distance": 1.5
+ },
+ {
+  "number": 45,
+  "line": "4호선",
+  "name": "창동",
+  "distance": 1.3
+ },
+ {
+  "number": 46,
+  "line": "4호선",
+  "name": "노원",
+  "distance": 1.4
+ },
+ {
+  "number": 47,
+  "line": "4호선",
+  "name": "상계",
+  "distance": 1
+ },
+ {
+  "number": 48,
+  "line": "4호선",
+  "name": "당고개",
+  "distance": 1.2
+ },
+ {
+  "number": 49,
+  "line": "4호선",
+  "name": "별내별가람",
+  "distance": 4.5
+ },
+ {
+  "number": 50,
+  "line": "4호선",
+  "name": "오남",
+  "distance": 7.8
+ },
+ {
+  "number": 51,
+  "line": "4호선",
+  "name": "진접",
+  "distance": 2.2
+ }
+]

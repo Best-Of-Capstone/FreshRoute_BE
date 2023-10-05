@@ -1,0 +1,320 @@
+[
+ {
+  "number": 1,
+  "line": "7호선",
+  "name": "장암",
+  "distance": 0
+ },
+ {
+  "number": 2,
+  "line": "7호선",
+  "name": "도봉산",
+  "distance": 1.4
+ },
+ {
+  "number": 3,
+  "line": "7호선",
+  "name": "수락산",
+  "distance": 1.6
+ },
+ {
+  "number": 4,
+  "line": "7호선",
+  "name": "마들",
+  "distance": 1.4
+ },
+ {
+  "number": 5,
+  "line": "7호선",
+  "name": "노원",
+  "distance": 1.2
+ },
+ {
+  "number": 6,
+  "line": "7호선",
+  "name": "중계",
+  "distance": 1.1
+ },
+ {
+  "number": 7,
+  "line": "7호선",
+  "name": "하계",
+  "distance": 1
+ },
+ {
+  "number": 8,
+  "line": "7호선",
+  "name": "공릉(서울과학기술대)",
+  "distance": 1.3
+ },
+ {
+  "number": 9,
+  "line": "7호선",
+  "name": "태릉입구",
+  "distance": 0.8
+ },
+ {
+  "number": 10,
+  "line": "7호선",
+  "name": "먹골",
+  "distance": 0.9
+ },
+ {
+  "number": 11,
+  "line": "7호선",
+  "name": "중화",
+  "distance": 0.9
+ },
+ {
+  "number": 12,
+  "line": "7호선",
+  "name": "상봉(시외버스터미널)",
+  "distance": 1
+ },
+ {
+  "number": 13,
+  "line": "7호선",
+  "name": "면목",
+  "distance": 0.8
+ },
+ {
+  "number": 14,
+  "line": "7호선",
+  "name": "사가정",
+  "distance": 0.9
+ },
+ {
+  "number": 15,
+  "line": "7호선",
+  "name": "용마산",
+  "distance": 0.8
+ },
+ {
+  "number": 16,
+  "line": "7호선",
+  "name": "중곡",
+  "distance": 0.9
+ },
+ {
+  "number": 17,
+  "line": "7호선",
+  "name": "군자(능동)",
+  "distance": 1.1
+ },
+ {
+  "number": 18,
+  "line": "7호선",
+  "name": "어린이대공원(세종대)",
+  "distance": 1.1
+ },
+ {
+  "number": 19,
+  "line": "7호선",
+  "name": "건대입구",
+  "distance": 0.8
+ },
+ {
+  "number": 20,
+  "line": "7호선",
+  "name": "뚝섬유원지",
+  "distance": 1
+ },
+ {
+  "number": 21,
+  "line": "7호선",
+  "name": "청담",
+  "distance": 2
+ },
+ {
+  "number": 22,
+  "line": "7호선",
+  "name": "강남구청",
+  "distance": 1.1
+ },
+ {
+  "number": 23,
+  "line": "7호선",
+  "name": "학동",
+  "distance": 0.9
+ },
+ {
+  "number": 24,
+  "line": "7호선",
+  "name": "논현",
+  "distance": 1
+ },
+ {
+  "number": 25,
+  "line": "7호선",
+  "name": "반포",
+  "distance": 0.9
+ },
+ {
+  "number": 26,
+  "line": "7호선",
+  "name": "고속터미널",
+  "distance": 0.9
+ },
+ {
+  "number": 27,
+  "line": "7호선",
+  "name": "내방",
+  "distance": 2.2
+ },
+ {
+  "number": 28,
+  "line": "7호선",
+  "name": "이수",
+  "distance": 1
+ },
+ {
+  "number": 29,
+  "line": "7호선",
+  "name": "남성",
+  "distance": 1
+ },
+ {
+  "number": 30,
+  "line": "7호선",
+  "name": "숭실대입구(살피재)",
+  "distance": 2
+ },
+ {
+  "number": 31,
+  "line": "7호선",
+  "name": "상도",
+  "distance": 0.9
+ },
+ {
+  "number": 32,
+  "line": "7호선",
+  "name": "장승배기",
+  "distance": 0.9
+ },
+ {
+  "number": 33,
+  "line": "7호선",
+  "name": "신대방삼거리",
+  "distance": 1.2
+ },
+ {
+  "number": 34,
+  "line": "7호선",
+  "name": "보라매",
+  "distance": 0.8
+ },
+ {
+  "number": 35,
+  "line": "7호선",
+  "name": "신풍",
+  "distance": 0.9
+ },
+ {
+  "number": 36,
+  "line": "7호선",
+  "name": "대림(구로구청)",
+  "distance": 1.4
+ },
+ {
+  "number": 37,
+  "line": "7호선",
+  "name": "남구로",
+  "distance": 1.1
+ },
+ {
+  "number": 38,
+  "line": "7호선",
+  "name": "가산디지털단지",
+  "distance": 0.8
+ },
+ {
+  "number": 39,
+  "line": "7호선",
+  "name": "철산",
+  "distance": 1.4
+ },
+ {
+  "number": 40,
+  "line": "7호선",
+  "name": "광명사거리",
+  "distance": 1.3
+ },
+ {
+  "number": 41,
+  "line": "7호선",
+  "name": "천왕",
+  "distance": 1.7
+ },
+ {
+  "number": 42,
+  "line": "7호선",
+  "name": "온수(성공회대입구)",
+  "distance": 1.5
+ },
+ {
+  "number": 43,
+  "line": "7호선",
+  "name": "까치울",
+  "distance": 2.2
+ },
+ {
+  "number": 44,
+  "line": "7호선",
+  "name": "부천종합운동장",
+  "distance": 1.2
+ },
+ {
+  "number": 45,
+  "line": "7호선",
+  "name": "춘의",
+  "distance": 0.8
+ },
+ {
+  "number": 46,
+  "line": "7호선",
+  "name": "신중동",
+  "distance": 1
+ },
+ {
+  "number": 47,
+  "line": "7호선",
+  "name": "부천시청",
+  "distance": 1.1
+ },
+ {
+  "number": 48,
+  "line": "7호선",
+  "name": "상동",
+  "distance": 0.9
+ },
+ {
+  "number": 49,
+  "line": "7호선",
+  "name": "삼산체육관",
+  "distance": 1.1
+ },
+ {
+  "number": 50,
+  "line": "7호선",
+  "name": "굴포천",
+  "distance": 0.9
+ },
+ {
+  "number": 51,
+  "line": "7호선",
+  "name": "부평구청",
+  "distance": 0.9
+ },
+ {
+  "number": 52,
+  "line": "7호선",
+  "name": "산곡",
+  "distance": 1.6
+ },
+ {
+  "number": 53,
+  "line": "7호선",
+  "name": "석남(거북시장)",
+  "distance": 2.6
+ }
+]

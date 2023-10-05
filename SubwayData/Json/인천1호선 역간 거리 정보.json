@@ -1,0 +1,182 @@
+[
+ {
+  "number": 1,
+  "line": "인천1호선",
+  "name": "계양",
+  "distance": 0
+ },
+ {
+  "number": 2,
+  "line": "인천1호선",
+  "name": "귤현",
+  "distance": 0.9
+ },
+ {
+  "number": 3,
+  "line": "인천1호선",
+  "name": "박촌",
+  "distance": 1.5
+ },
+ {
+  "number": 4,
+  "line": "인천1호선",
+  "name": "임학",
+  "distance": 1.1
+ },
+ {
+  "number": 5,
+  "line": "인천1호선",
+  "name": "계산",
+  "distance": 1.1
+ },
+ {
+  "number": 6,
+  "line": "인천1호선",
+  "name": "경인교대입구",
+  "distance": 0.9
+ },
+ {
+  "number": 7,
+  "line": "인천1호선",
+  "name": "작전",
+  "distance": 0.9
+ },
+ {
+  "number": 8,
+  "line": "인천1호선",
+  "name": "갈산",
+  "distance": 1.4
+ },
+ {
+  "number": 9,
+  "line": "인천1호선",
+  "name": "부평구청",
+  "distance": 1
+ },
+ {
+  "number": 10,
+  "line": "인천1호선",
+  "name": "부평시장",
+  "distance": 1.1
+ },
+ {
+  "number": 11,
+  "line": "인천1호선",
+  "name": "부평",
+  "distance": 0.9
+ },
+ {
+  "number": 12,
+  "line": "인천1호선",
+  "name": "동수",
+  "distance": 0.9
+ },
+ {
+  "number": 13,
+  "line": "인천1호선",
+  "name": "부평삼거리",
+  "distance": 1.1
+ },
+ {
+  "number": 14,
+  "line": "인천1호선",
+  "name": "간석오거리",
+  "distance": 1.2
+ },
+ {
+  "number": 15,
+  "line": "인천1호선",
+  "name": "인천시청",
+  "distance": 1.4
+ },
+ {
+  "number": 16,
+  "line": "인천1호선",
+  "name": "예술회관",
+  "distance": 1
+ },
+ {
+  "number": 17,
+  "line": "인천1호선",
+  "name": "인천터미널",
+  "distance": 0.8
+ },
+ {
+  "number": 18,
+  "line": "인천1호선",
+  "name": "문학경기장",
+  "distance": 0.8
+ },
+ {
+  "number": 19,
+  "line": "인천1호선",
+  "name": "선학",
+  "distance": 0.8
+ },
+ {
+  "number": 20,
+  "line": "인천1호선",
+  "name": "신연수",
+  "distance": 1.1
+ },
+ {
+  "number": 21,
+  "line": "인천1호선",
+  "name": "원인재",
+  "distance": 0.9
+ },
+ {
+  "number": 22,
+  "line": "인천1호선",
+  "name": "동춘",
+  "distance": 1.1
+ },
+ {
+  "number": 23,
+  "line": "인천1호선",
+  "name": "동막",
+  "distance": 1
+ },
+ {
+  "number": 24,
+  "line": "인천1호선",
+  "name": "캠퍼스타운",
+  "distance": 1.6
+ },
+ {
+  "number": 25,
+  "line": "인천1호선",
+  "name": "테크노파크",
+  "distance": 0.8
+ },
+ {
+  "number": 26,
+  "line": "인천1호선",
+  "name": "지식정보단지",
+  "distance": 1.4
+ },
+ {
+  "number": 27,
+  "line": "인천1호선",
+  "name": "인천대입구",
+  "distance": 1
+ },
+ {
+  "number": 28,
+  "line": "인천1호선",
+  "name": "센트럴파크",
+  "distance": 0.9
+ },
+ {
+  "number": 29,
+  "line": "인천1호선",
+  "name": "국제업무지구",
+  "distance": 0.8
+ },
+ {
+  "number": 30,
+  "line": "인천1호선",
+  "name": "송도달빛축제공원",
+  "distance": 0.9
+ }
+]
