@@ -1,0 +1,326 @@
+[
+ {
+  "number": 1,
+  "line": "2호선",
+  "name": "시청",
+  "distance": 0
+ },
+ {
+  "number": 2,
+  "line": "2호선",
+  "name": "을지로입구",
+  "distance": 0.7
+ },
+ {
+  "number": 3,
+  "line": "2호선",
+  "name": "을지로3가",
+  "distance": 0.8
+ },
+ {
+  "number": 4,
+  "line": "2호선",
+  "name": "을지로4가",
+  "distance": 0.6
+ },
+ {
+  "number": 5,
+  "line": "2호선",
+  "name": "동대문역사문화공원",
+  "distance": 1
+ },
+ {
+  "number": 6,
+  "line": "2호선",
+  "name": "신당",
+  "distance": 0.9
+ },
+ {
+  "number": 7,
+  "line": "2호선",
+  "name": "상왕십리",
+  "distance": 0.9
+ },
+ {
+  "number": 8,
+  "line": "2호선",
+  "name": "왕십리",
+  "distance": 0.8
+ },
+ {
+  "number": 9,
+  "line": "2호선",
+  "name": "한양대",
+  "distance": 1
+ },
+ {
+  "number": 10,
+  "line": "2호선",
+  "name": "뚝섬",
+  "distance": 1.1
+ },
+ {
+  "number": 11,
+  "line": "2호선",
+  "name": "성수",
+  "distance": 0.8
+ },
+ {
+  "number": 12,
+  "line": "2호선",
+  "name": "건대입구",
+  "distance": 1.2
+ },
+ {
+  "number": 13,
+  "line": "2호선",
+  "name": "구의(광진구청)",
+  "distance": 1.6
+ },
+ {
+  "number": 14,
+  "line": "2호선",
+  "name": "강변(동서울터미널)",
+  "distance": 0.9
+ },
+ {
+  "number": 15,
+  "line": "2호선",
+  "name": "잠실나루",
+  "distance": 1.8
+ },
+ {
+  "number": 16,
+  "line": "2호선",
+  "name": "잠실(송파구청)",
+  "distance": 1
+ },
+ {
+  "number": 17,
+  "line": "2호선",
+  "name": "잠실새내",
+  "distance": 1.2
+ },
+ {
+  "number": 18,
+  "line": "2호선",
+  "name": "종합운동장",
+  "distance": 1.2
+ },
+ {
+  "number": 19,
+  "line": "2호선",
+  "name": "삼성(무역센터)",
+  "distance": 1
+ },
+ {
+  "number": 20,
+  "line": "2호선",
+  "name": "선릉",
+  "distance": 1.3
+ },
+ {
+  "number": 21,
+  "line": "2호선",
+  "name": "역삼",
+  "distance": 1.2
+ },
+ {
+  "number": 22,
+  "line": "2호선",
+  "name": "강남",
+  "distance": 0.8
+ },
+ {
+  "number": 23,
+  "line": "2호선",
+  "name": "교대(법원·검찰청)",
+  "distance": 1.2
+ },
+ {
+  "number": 24,
+  "line": "2호선",
+  "name": "서초",
+  "distance": 0.7
+ },
+ {
+  "number": 25,
+  "line": "2호선",
+  "name": "방배",
+  "distance": 1.7
+ },
+ {
+  "number": 26,
+  "line": "2호선",
+  "name": "사당",
+  "distance": 1.6
+ },
+ {
+  "number": 27,
+  "line": "2호선",
+  "name": "낙성대",
+  "distance": 1.7
+ },
+ {
+  "number": 28,
+  "line": "2호선",
+  "name": "서울대입구(관악구청)",
+  "distance": 1
+ },
+ {
+  "number": 29,
+  "line": "2호선",
+  "name": "봉천",
+  "distance": 1
+ },
+ {
+  "number": 30,
+  "line": "2호선",
+  "name": "신림",
+  "distance": 1.1
+ },
+ {
+  "number": 31,
+  "line": "2호선",
+  "name": "신대방",
+  "distance": 1.8
+ },
+ {
+  "number": 32,
+  "line": "2호선",
+  "name": "구로디지털단지",
+  "distance": 1.1
+ },
+ {
+  "number": 33,
+  "line": "2호선",
+  "name": "대림(구로구청)",
+  "distance": 1.1
+ },
+ {
+  "number": 34,
+  "line": "2호선",
+  "name": "신도림",
+  "distance": 1.8
+ },
+ {
+  "number": 35,
+  "line": "2호선",
+  "name": "문래",
+  "distance": 1.2
+ },
+ {
+  "number": 36,
+  "line": "2호선",
+  "name": "영등포구청",
+  "distance": 0.9
+ },
+ {
+  "number": 37,
+  "line": "2호선",
+  "name": "당산",
+  "distance": 1.1
+ },
+ {
+  "number": 38,
+  "line": "2호선",
+  "name": "합정",
+  "distance": 2
+ },
+ {
+  "number": 39,
+  "line": "2호선",
+  "name": "홍대입구",
+  "distance": 1.1
+ },
+ {
+  "number": 40,
+  "line": "2호선",
+  "name": "신촌",
+  "distance": 1.3
+ },
+ {
+  "number": 41,
+  "line": "2호선",
+  "name": "이대",
+  "distance": 0.8
+ },
+ {
+  "number": 42,
+  "line": "2호선",
+  "name": "아현",
+  "distance": 0.9
+ },
+ {
+  "number": 43,
+  "line": "2호선",
+  "name": "충정로(경기대입구)",
+  "distance": 0.8
+ },
+ {
+  "number": 44,
+  "line": "2호선",
+  "name": "시청",
+  "distance": 1.1
+ },
+ {
+  "number": 45,
+  "line": "2호선",
+  "name": "신설동",
+  "distance": 0
+ },
+ {
+  "number": 46,
+  "line": "2호선",
+  "name": "용두(동대문구청)",
+  "distance": 1.2
+ },
+ {
+  "number": 47,
+  "line": "2호선",
+  "name": "신답",
+  "distance": 0.9
+ },
+ {
+  "number": 48,
+  "line": "2호선",
+  "name": "용답",
+  "distance": 1
+ },
+ {
+  "number": 49,
+  "line": "2호선",
+  "name": "성수",
+  "distance": 2.3
+ },
+ {
+  "number": 50,
+  "line": "2호선",
+  "name": "신도림",
+  "distance": 0
+ },
+ {
+  "number": 51,
+  "line": "2호선",
+  "name": "도림천",
+  "distance": 1
+ },
+ {
+  "number": 52,
+  "line": "2호선",
+  "name": "양천구청",
+  "distance": 1.7
+ },
+ {
+  "number": 53,
+  "line": "2호선",
+  "name": "신정네거리",
+  "distance": 1.9
+ },
+ {
+  "number": 54,
+  "line": "2호선",
+  "name": "까치산",
+  "distance": 1.35
+ }
+]

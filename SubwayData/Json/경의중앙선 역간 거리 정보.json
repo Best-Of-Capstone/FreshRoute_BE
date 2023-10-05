@@ -1,0 +1,356 @@
+[
+ {
+  "number": 1,
+  "line": "경의중앙선",
+  "name": "도라산",
+  "distance": 0
+ },
+ {
+  "number": 2,
+  "line": "경의중앙선",
+  "name": "임진강",
+  "distance": 3.7
+ },
+ {
+  "number": 3,
+  "line": "경의중앙선",
+  "name": "운천",
+  "distance": 6
+ },
+ {
+  "number": 4,
+  "line": "경의중앙선",
+  "name": "문산",
+  "distance": 4
+ },
+ {
+  "number": 5,
+  "line": "경의중앙선",
+  "name": "파주(두원대학)",
+  "distance": 4.4
+ },
+ {
+  "number": 6,
+  "line": "경의중앙선",
+  "name": "월롱(서영대학교)",
+  "distance": 2.2
+ },
+ {
+  "number": 7,
+  "line": "경의중앙선",
+  "name": "금촌",
+  "distance": 4.1
+ },
+ {
+  "number": 8,
+  "line": "경의중앙선",
+  "name": "금릉",
+  "distance": 2.1
+ },
+ {
+  "number": 9,
+  "line": "경의중앙선",
+  "name": "운정",
+  "distance": 3.1
+ },
+ {
+  "number": 10,
+  "line": "경의중앙선",
+  "name": "야당",
+  "distance": 3.1
+ },
+ {
+  "number": 11,
+  "line": "경의중앙선",
+  "name": "탄현",
+  "distance": 2
+ },
+ {
+  "number": 12,
+  "line": "경의중앙선",
+  "name": "일산",
+  "distance": 1.7
+ },
+ {
+  "number": 13,
+  "line": "경의중앙선",
+  "name": "풍산",
+  "distance": 1.9
+ },
+ {
+  "number": 14,
+  "line": "경의중앙선",
+  "name": "백마",
+  "distance": 1.7
+ },
+ {
+  "number": 15,
+  "line": "경의중앙선",
+  "name": "곡산",
+  "distance": 1.6
+ },
+ {
+  "number": 16,
+  "line": "경의중앙선",
+  "name": "대곡",
+  "distance": 1.7
+ },
+ {
+  "number": 17,
+  "line": "경의중앙선",
+  "name": "능곡",
+  "distance": 1.8
+ },
+ {
+  "number": 18,
+  "line": "경의중앙선",
+  "name": "행신",
+  "distance": 1.5
+ },
+ {
+  "number": 19,
+  "line": "경의중앙선",
+  "name": "강매",
+  "distance": 1
+ },
+ {
+  "number": 20,
+  "line": "경의중앙선",
+  "name": "화전(한국항공대)",
+  "distance": 2.4
+ },
+ {
+  "number": 21,
+  "line": "경의중앙선",
+  "name": "수색",
+  "distance": 3.4
+ },
+ {
+  "number": 22,
+  "line": "경의중앙선",
+  "name": "디지털미디어시티",
+  "distance": 0.6
+ },
+ {
+  "number": 23,
+  "line": "경의중앙선",
+  "name": "가좌",
+  "distance": 1.7
+ },
+ {
+  "number": 24,
+  "line": "경의중앙선",
+  "name": "홍대입구",
+  "distance": 1.7
+ },
+ {
+  "number": 25,
+  "line": "경의중앙선",
+  "name": "서강대",
+  "distance": 0.9
+ },
+ {
+  "number": 26,
+  "line": "경의중앙선",
+  "name": "공덕",
+  "distance": 1.9
+ },
+ {
+  "number": 27,
+  "line": "경의중앙선",
+  "name": "효창공원앞",
+  "distance": 1
+ },
+ {
+  "number": 28,
+  "line": "경의중앙선",
+  "name": "용산",
+  "distance": 1.5
+ },
+ {
+  "number": 29,
+  "line": "경의중앙선",
+  "name": "이촌",
+  "distance": 1.9
+ },
+ {
+  "number": 30,
+  "line": "경의중앙선",
+  "name": "서빙고",
+  "distance": 1.4
+ },
+ {
+  "number": 31,
+  "line": "경의중앙선",
+  "name": "한남",
+  "distance": 1.9
+ },
+ {
+  "number": 32,
+  "line": "경의중앙선",
+  "name": "옥수",
+  "distance": 1.6
+ },
+ {
+  "number": 33,
+  "line": "경의중앙선",
+  "name": "응봉",
+  "distance": 1.8
+ },
+ {
+  "number": 34,
+  "line": "경의중앙선",
+  "name": "왕십리",
+  "distance": 1.4
+ },
+ {
+  "number": 35,
+  "line": "경의중앙선",
+  "name": "청량리",
+  "distance": 2.4
+ },
+ {
+  "number": 36,
+  "line": "경의중앙선",
+  "name": "회기",
+  "distance": 1.4
+ },
+ {
+  "number": 37,
+  "line": "경의중앙선",
+  "name": "중랑",
+  "distance": 0.8
+ },
+ {
+  "number": 38,
+  "line": "경의중앙선",
+  "name": "상봉",
+  "distance": 0.8
+ },
+ {
+  "number": 39,
+  "line": "경의중앙선",
+  "name": "망우",
+  "distance": 0.6
+ },
+ {
+  "number": 40,
+  "line": "경의중앙선",
+  "name": "양원(서울시북부병원)",
+  "distance": 1.7
+ },
+ {
+  "number": 41,
+  "line": "경의중앙선",
+  "name": "구리",
+  "distance": 3.2
+ },
+ {
+  "number": 42,
+  "line": "경의중앙선",
+  "name": "도농",
+  "distance": 1.7
+ },
+ {
+  "number": 43,
+  "line": "경의중앙선",
+  "name": "양정",
+  "distance": 3.7
+ },
+ {
+  "number": 44,
+  "line": "경의중앙선",
+  "name": "덕소",
+  "distance": 2.3
+ },
+ {
+  "number": 45,
+  "line": "경의중앙선",
+  "name": "도심",
+  "distance": 1.5
+ },
+ {
+  "number": 46,
+  "line": "경의중앙선",
+  "name": "팔당",
+  "distance": 4.2
+ },
+ {
+  "number": 47,
+  "line": "경의중앙선",
+  "name": "운길산",
+  "distance": 6.4
+ },
+ {
+  "number": 48,
+  "line": "경의중앙선",
+  "name": "양수",
+  "distance": 1.9
+ },
+ {
+  "number": 49,
+  "line": "경의중앙선",
+  "name": "신원",
+  "distance": 4.7
+ },
+ {
+  "number": 50,
+  "line": "경의중앙선",
+  "name": "국수",
+  "distance": 2.9
+ },
+ {
+  "number": 51,
+  "line": "경의중앙선",
+  "name": "아신(아세아연합신학대)",
+  "distance": 4.1
+ },
+ {
+  "number": 52,
+  "line": "경의중앙선",
+  "name": "오빈",
+  "distance": 2.8
+ },
+ {
+  "number": 53,
+  "line": "경의중앙선",
+  "name": "양평",
+  "distance": 2.2
+ },
+ {
+  "number": 54,
+  "line": "경의중앙선",
+  "name": "원덕(추읍산)",
+  "distance": 5.8
+ },
+ {
+  "number": 55,
+  "line": "경의중앙선",
+  "name": "용문",
+  "distance": 5.8
+ },
+ {
+  "number": 56,
+  "line": "경의중앙선",
+  "name": "지평",
+  "distance": 3.6
+ },
+ {
+  "number": 57,
+  "line": "경의중앙선",
+  "name": "가좌",
+  "distance": 0
+ },
+ {
+  "number": 58,
+  "line": "경의중앙선",
+  "name": "신촌",
+  "distance": 1.7
+ },
+ {
+  "number": 59,
+  "line": "경의중앙선",
+  "name": "서울역",
+  "distance": 3.1
+ }
+]

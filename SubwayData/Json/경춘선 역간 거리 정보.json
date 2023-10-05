@@ -1,0 +1,158 @@
+[
+ {
+  "number": 1,
+  "line": "경춘선",
+  "name": "청량리",
+  "distance": 0
+ },
+ {
+  "number": 2,
+  "line": "경춘선",
+  "name": "회기",
+  "distance": 1.4
+ },
+ {
+  "number": 3,
+  "line": "경춘선",
+  "name": "중랑",
+  "distance": 0.8
+ },
+ {
+  "number": 4,
+  "line": "경춘선",
+  "name": "상봉",
+  "distance": 0.8
+ },
+ {
+  "number": 5,
+  "line": "경춘선",
+  "name": "망우",
+  "distance": 0.6
+ },
+ {
+  "number": 6,
+  "line": "경춘선",
+  "name": "신내",
+  "distance": 2.6
+ },
+ {
+  "number": 7,
+  "line": "경춘선",
+  "name": "갈매",
+  "distance": 2.6
+ },
+ {
+  "number": 8,
+  "line": "경춘선",
+  "name": "별내(삼육대학교)",
+  "distance": 1.5
+ },
+ {
+  "number": 9,
+  "line": "경춘선",
+  "name": "퇴계원",
+  "distance": 1.6
+ },
+ {
+  "number": 10,
+  "line": "경춘선",
+  "name": "사릉",
+  "distance": 3.3
+ },
+ {
+  "number": 11,
+  "line": "경춘선",
+  "name": "금곡",
+  "distance": 3.6
+ },
+ {
+  "number": 12,
+  "line": "경춘선",
+  "name": "평내호평",
+  "distance": 4
+ },
+ {
+  "number": 13,
+  "line": "경춘선",
+  "name": "천마산",
+  "distance": 4
+ },
+ {
+  "number": 14,
+  "line": "경춘선",
+  "name": "마석",
+  "distance": 2.2
+ },
+ {
+  "number": 15,
+  "line": "경춘선",
+  "name": "대성리",
+  "distance": 7.4
+ },
+ {
+  "number": 16,
+  "line": "경춘선",
+  "name": "청평",
+  "distance": 7.5
+ },
+ {
+  "number": 17,
+  "line": "경춘선",
+  "name": "상천(호명호수)",
+  "distance": 4.8
+ },
+ {
+  "number": 18,
+  "line": "경춘선",
+  "name": "가평(자라섬·남이섬)",
+  "distance": 7.1
+ },
+ {
+  "number": 19,
+  "line": "경춘선",
+  "name": "굴봉산(제이드가든)",
+  "distance": 4.7
+ },
+ {
+  "number": 20,
+  "line": "경춘선",
+  "name": "백양리(엘리시안강촌)",
+  "distance": 2.9
+ },
+ {
+  "number": 21,
+  "line": "경춘선",
+  "name": "강촌",
+  "distance": 5.3
+ },
+ {
+  "number": 22,
+  "line": "경춘선",
+  "name": "김유정",
+  "distance": 7.4
+ },
+ {
+  "number": 23,
+  "line": "경춘선",
+  "name": "춘천(한림대)",
+  "distance": 2.7
+ },
+ {
+  "number": 24,
+  "line": "경춘선",
+  "name": "남춘천(강원대)",
+  "distance": 5.9
+ },
+ {
+  "number": 25,
+  "line": "경춘선",
+  "name": "광운대",
+  "distance": 0
+ },
+ {
+  "number": 26,
+  "line": "경춘선",
+  "name": "상봉",
+  "distance": 4.3
+ }
+]

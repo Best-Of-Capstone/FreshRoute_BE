@@ -1,0 +1,86 @@
+[
+ {
+  "number": 1,
+  "line": "공항철도",
+  "name": "서울역",
+  "distance": 0
+ },
+ {
+  "number": 2,
+  "line": "공항철도",
+  "name": "공덕",
+  "distance": 3.3
+ },
+ {
+  "number": 3,
+  "line": "공항철도",
+  "name": "홍대입구",
+  "distance": 2.8
+ },
+ {
+  "number": 4,
+  "line": "공항철도",
+  "name": "디지털미디어시티",
+  "distance": 3.4
+ },
+ {
+  "number": 5,
+  "line": "공항철도",
+  "name": "마곡나루",
+  "distance": 8.6
+ },
+ {
+  "number": 6,
+  "line": "공항철도",
+  "name": "김포공항",
+  "distance": 2.3
+ },
+ {
+  "number": 7,
+  "line": "공항철도",
+  "name": "계양",
+  "distance": 6.6
+ },
+ {
+  "number": 8,
+  "line": "공항철도",
+  "name": "검암",
+  "distance": 5.5
+ },
+ {
+  "number": 9,
+  "line": "공항철도",
+  "name": "청라국제도시",
+  "distance": 4.8
+ },
+ {
+  "number": 10,
+  "line": "공항철도",
+  "name": "영종",
+  "distance": 10.2
+ },
+ {
+  "number": 11,
+  "line": "공항철도",
+  "name": "운서",
+  "distance": 3.6
+ },
+ {
+  "number": 12,
+  "line": "공항철도",
+  "name": "공항화물청사",
+  "distance": 4.3
+ },
+ {
+  "number": 13,
+  "line": "공항철도",
+  "name": "인천공항1터미널",
+  "distance": 2.6
+ },
+ {
+  "number": 14,
+  "line": "공항철도",
+  "name": "인천공항2터미널",
+  "distance": 5.8
+ }
+]
