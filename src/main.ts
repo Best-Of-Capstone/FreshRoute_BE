@@ -15,9 +15,9 @@ const firebaseConfig = JSON.parse(firebaseApiFile);
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const subwayFile = fs.readFileSync(__dirname + "/../SubwayData/csvjson.json", "utf-8");
+const subwayFile = fs.readFileSync(__dirname + "/../SubwayData/서울시 역사마스터 정보 최종.json", "utf-8");
 const subwayData = JSON.parse(subwayFile);
-const subwaysRef = collection(db, "Subway");
+const subwaysRef = collection(db, "SubwayTest4");
 const transferRef = collection(db, "Transfer");
 
 
@@ -28,8 +28,8 @@ const setSubway = () => {
 }
 
 const makeTransfer = async () => {
-    const subwayfirebase = await getDocs(subwaysRef);
-    subwayfirebase.forEach(async (docs) => {
+    const subwayFirebase = await getDocs(subwaysRef);
+    subwayFirebase.forEach(async (docs) => {
         const id = docs.id;
         const data = docs.data();
         const q = await query(subwaysRef, where("name", "==", data.name));
@@ -76,6 +76,7 @@ const setLinkedList = () => {
                         }
                     }
                     adjacency.push({
+                        id: queryDoc.id,
                         line: v.line,
                         name: v.name,
                         dist: v.distance,
@@ -94,6 +95,7 @@ const setLinkedList = () => {
                         }
                     }
                     adjacency.push({
+                        id: queryDoc.id,
                         line: u.line,
                         name: u.name,
                         dist: v.distance,
@@ -106,6 +108,6 @@ const setLinkedList = () => {
         }
     })
 }
-setSubway();
+// setSubway();
 // setLinkedList();
 // makeTransfer()

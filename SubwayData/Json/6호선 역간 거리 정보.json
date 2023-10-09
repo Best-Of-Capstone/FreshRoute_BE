@@ -8,13 +8,13 @@
  {
   "number": 2,
   "line": "6호선",
-  "name": "봉화산(서울의료원)",
+  "name": "봉화산",
   "distance": 1.3
  },
  {
   "number": 3,
   "line": "6호선",
-  "name": "화랑대(서울여대입구)",
+  "name": "화랑대",
   "distance": 0.7
  },
  {
@@ -38,25 +38,25 @@
  {
   "number": 7,
   "line": "6호선",
-  "name": "상월곡(한국과학기술연구원)",
+  "name": "상월곡",
   "distance": 0.8
  },
  {
   "number": 8,
   "line": "6호선",
-  "name": "월곡(동덕여대)",
+  "name": "월곡",
   "distance": 0.8
  },
  {
   "number": 9,
   "line": "6호선",
-  "name": "고려대(종암)",
+  "name": "고려대",
   "distance": 1.4
  },
  {
   "number": 10,
   "line": "6호선",
-  "name": "안암(고대병원앞)",
+  "name": "안암",
   "distance": 0.8
  },
  {
@@ -116,7 +116,7 @@
  {
   "number": 20,
   "line": "6호선",
-  "name": "녹사평(용산구청)",
+  "name": "녹사평",
   "distance": 0.8
  },
  {
@@ -140,13 +140,13 @@
  {
   "number": 24,
   "line": "6호선",
-  "name": "대흥(서강대앞)",
+  "name": "대흥",
   "distance": 0.9
  },
  {
   "number": 25,
   "line": "6호선",
-  "name": "광흥창(서강)",
+  "name": "광흥창",
   "distance": 1
  },
  {
@@ -176,7 +176,7 @@
  {
   "number": 30,
   "line": "6호선",
-  "name": "월드컵경기장(성산)",
+  "name": "월드컵경기장",
   "distance": 0.8
  },
  {
@@ -188,13 +188,13 @@
  {
   "number": 32,
   "line": "6호선",
-  "name": "증산(명지대앞)",
+  "name": "증산",
   "distance": 1.1
  },
  {
   "number": 33,
   "line": "6호선",
-  "name": "새절(신사)",
+  "name": "새절",
   "distance": 0.9
  },
  {

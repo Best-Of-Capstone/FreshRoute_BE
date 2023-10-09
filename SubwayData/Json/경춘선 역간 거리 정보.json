@@ -44,7 +44,7 @@
  {
   "number": 8,
   "line": "경춘선",
-  "name": "별내(삼육대학교)",
+  "name": "별내",
   "distance": 1.5
  },
  {
@@ -98,25 +98,25 @@
  {
   "number": 17,
   "line": "경춘선",
-  "name": "상천(호명호수)",
+  "name": "상천",
   "distance": 4.8
  },
  {
   "number": 18,
   "line": "경춘선",
-  "name": "가평(자라섬·남이섬)",
+  "name": "가평",
   "distance": 7.1
  },
  {
   "number": 19,
   "line": "경춘선",
-  "name": "굴봉산(제이드가든)",
+  "name": "굴봉산",
   "distance": 4.7
  },
  {
   "number": 20,
   "line": "경춘선",
-  "name": "백양리(엘리시안강촌)",
+  "name": "백양리",
   "distance": 2.9
  },
  {
@@ -134,13 +134,13 @@
  {
   "number": 23,
   "line": "경춘선",
-  "name": "춘천(한림대)",
+  "name": "춘천",
   "distance": 2.7
  },
  {
   "number": 24,
   "line": "경춘선",
-  "name": "남춘천(강원대)",
+  "name": "남춘천",
   "distance": 5.9
  },
  {

@@ -110,7 +110,7 @@
  {
   "number": 19,
   "line": "3호선",
-  "name": "경복궁(정부서울청사)",
+  "name": "경복궁",
   "distance": 1.6
  },
  {
@@ -188,19 +188,19 @@
  {
   "number": 32,
   "line": "3호선",
-  "name": "교대(법원·검찰청)",
+  "name": "교대",
   "distance": 1.6
  },
  {
   "number": 33,
   "line": "3호선",
-  "name": "남부터미널(예술의전당)",
+  "name": "남부터미널",
   "distance": 0.9
  },
  {
   "number": 34,
   "line": "3호선",
-  "name": "양재(서초구청)",
+  "name": "양재",
   "distance": 1.8
  },
  {
