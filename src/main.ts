@@ -17,8 +17,7 @@ const db = getFirestore(app);
 
 const subwayFile = fs.readFileSync(__dirname + "/../SubwayData/서울시 역사마스터 정보 최종.json", "utf-8");
 const subwayData = JSON.parse(subwayFile);
-const subwaysRef = collection(db, "SubwayTest4");
-const transferRef = collection(db, "Transfer");
+const subwaysRef = collection(db, "SubwayTest5");
 
 
 const setSubway = () => {
@@ -28,22 +27,72 @@ const setSubway = () => {
 }
 
 const makeTransfer = async () => {
-    const subwayFirebase = await getDocs(subwaysRef);
-    subwayFirebase.forEach(async (docs) => {
-        const id = docs.id;
-        const data = docs.data();
-        const q = await query(subwaysRef, where("name", "==", data.name));
-        const querySnapshot = await getDocs(q);
-        if (querySnapshot.size > 1){
-            const idObj = {};
-            let idx = 0;
-            querySnapshot.forEach((queryDoc) => {
-                idObj[idx] = queryDoc.id;
-                idx++;
-            })
-            setDoc(doc(transferRef, data.name), idObj);
+    // const subwayFirebase = await getDocs(subwaysRef);
+    const transferRef = collection(db, "Transfer3");
+    const transferData = JSON.parse(fs.readFileSync(__dirname + "/../SubwayData/Transfer.json", "utf-8"));
+    transferData.forEach(async (data) => {
+        const srcQuery = query(subwaysRef,
+            where("name", "==", data.name),
+            where("line",  "==", data.line)
+        );
+        const dstQuery = query(subwaysRef,
+            where("name", "==", data.name),
+            where("line", "==", data["transfer_line"])
+        );
+        const srcQuerySnapShot = await getDocs(srcQuery);
+        const dstQuerySnapShot = await getDocs(dstQuery);
+        let srcId, dstId;
+        if (srcQuerySnapShot.size !== 1 || dstQuerySnapShot.size !== 1){
+            console.log(data);
+            console.log(srcQuerySnapShot.size);
+            console.log(dstQuerySnapShot.size)
+            console.log("duplicate Docs!!");
+            process.exit(1);
         }
-    })
+        srcQuerySnapShot.forEach((queryDoc) => {
+            srcId = queryDoc.id;
+        });
+        dstQuerySnapShot.forEach((queryDoc) => {
+            dstId = queryDoc.id;
+        })
+        await setDoc(doc(transferRef, srcId), {
+            "name": data.name,
+            "line": data.line,
+            "transferInfo": {
+                "name": data.name,
+                "line": data["transfer_line"],
+                "dist": data.dist,
+                "time": data.time,
+            }
+        });
+        await setDoc(doc(transferRef, dstId), {
+            "name": data.name,
+            "line": data["transfer_line"],
+            "transferInfo":{
+                "name": data.name,
+                "line": data.line,
+                "dist": data.dist,
+                "time": data.time,
+            }
+        });
+    });
+
+
+    // subwayFirebase.forEach(async (docs) => {
+    //     const id = docs.id;
+    //     const data = docs.data();
+    //     const q = await query(subwaysRef, where("name", "==", data.name));
+    //     const querySnapshot = await getDocs(q);
+    //     if (querySnapshot.size > 1){
+    //         const idObj = {};
+    //         let idx = 0;
+    //         querySnapshot.forEach((queryDoc) => {
+    //             idObj[idx] = queryDoc.id;
+    //             idx++;
+    //         })
+    //         setDoc(doc(transferRef, data.name), idObj);
+    //     }
+    // })
 }
 
 const JsonDir = fs.readdirSync(__dirname + "/../SubwayData/Json");
@@ -108,6 +157,6 @@ const setLinkedList = () => {
         }
     })
 }
-// setSubway();
-// setLinkedList();
-// makeTransfer()
+//setSubway();
+//setLinkedList();
+makeTransfer()
