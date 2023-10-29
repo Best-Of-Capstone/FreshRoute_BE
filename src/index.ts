@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import express from "express";
-import {setCors} from "./utils/cors";
+import {setCors} from "./Utils/CorsUtil";
 
 dotenv.config();
 
