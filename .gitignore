@@ -1,4 +1,5 @@
 .env
 package-*.json
 .idea/
+build/
 node_modules/
