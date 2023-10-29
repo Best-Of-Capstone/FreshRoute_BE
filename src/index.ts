@@ -1,8 +1,11 @@
 import dotenv from "dotenv";
 import express from "express";
-import {setCors} from "./Utils/CorsUtil";
+
+import findRouteRouter from "./Routes/FindRouteAPI";
 import userRouter from "./Routes/UserAPI";
 import weatherRouter from "./Routes/WeatherAPI";
+
+import {setCors} from "./Utils/CorsUtil";
 
 dotenv.config();
 
@@ -12,6 +15,7 @@ setCors(app);
 app.use(express.json());
 app.use(express.urlencoded({extended : false}));
 
+app.use("/findRouter", findRouteRouter);
 app.use("/user", userRouter);
 app.use("/weather", weatherRouter);
 
