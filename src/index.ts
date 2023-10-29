@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import {setCors} from "./Utils/CorsUtil";
 import userRouter from "./Routes/UserAPI";
+import weatherRouter from "./Routes/WeatherAPI";
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended : false}));
 
 app.use("/user", userRouter);
+app.use("/weather", weatherRouter);
 
 app.get("/", (req, res) => {
     res.send("Hello, World!");
