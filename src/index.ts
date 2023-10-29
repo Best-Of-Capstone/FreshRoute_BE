@@ -1,13 +1,17 @@
 import dotenv from "dotenv";
 import express from "express";
 import {setCors} from "./Utils/CorsUtil";
+import userRouter from "./Routes/UserAPI";
 
 dotenv.config();
 
 const app = express();
+setCors(app);
+
 app.use(express.json());
 app.use(express.urlencoded({extended : false}));
-setCors(app);
+
+app.use("/user", userRouter);
 
 app.get("/", (req, res) => {
     res.send("Hello, World!");
