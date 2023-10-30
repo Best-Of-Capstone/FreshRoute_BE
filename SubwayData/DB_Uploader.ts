@@ -15,7 +15,7 @@ const firebaseConfig = JSON.parse(firebaseApiFile);
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const subwayFile = fs.readFileSync(__dirname + "/../SubwayData/csvjson.json", "utf-8");
+const subwayFile = fs.readFileSync(__dirname + "/csvjson.json", "utf-8");
 const subwayData = JSON.parse(subwayFile);
 const subwaysRef = collection(db, "Subway");
 const transferRef = collection(db, "Transfer");
@@ -46,10 +46,10 @@ const makeTransfer = async () => {
     })
 }
 
-const JsonDir = fs.readdirSync(__dirname + "/../SubwayData/Json");
+const JsonDir = fs.readdirSync(__dirname + "/Json");
 const setLinkedList = () => {
     JsonDir.forEach(async (filename) => {
-        const JsonFile = fs.readFileSync(__dirname + "/../SubwayData/Json/" + filename, "utf-8");
+        const JsonFile = fs.readFileSync(__dirname + "/Json/" + filename, "utf-8");
         const distData = JSON.parse(JsonFile);
         for (let i = 0; i < distData.length - 1; i++){
             const u = distData[i];
