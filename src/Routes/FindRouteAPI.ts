@@ -5,6 +5,7 @@ const findRouteRouter = express.Router();
 
 findRouteRouter.post("/", async (req: Request, res: Response) => {
     const URL: string = "https://api.openrouteservice.org/v2/directions/foot-walking/geojson";
+    const coordinatesList = [];
     const RESULT_DATA = {
         RESULT_CODE: 0,
         RESULT_MSG: "Ready",
@@ -15,8 +16,13 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
         RESULT_DATA['RESULT_MSG'] = "body must have startCord property and endCord property";
         res.send(RESULT_DATA);
     }
+    coordinatesList.push(req.body.startCord);
+    if (req.body?.stopover !== undefined) {
+        coordinatesList.push(...req.body.stopover);
+    }
+    coordinatesList.push(req.body.endCord);
     const routeMsg = await axios.post(URL, {
-        coordinates: [[8.681495, 49.41461], [8.686507, 49.41943], [8.687872, 49.420318]]
+        coordinates: coordinatesList
     }, {
         headers: {
             Authorization: process.env.OPENROUTESERVICE_KEY
