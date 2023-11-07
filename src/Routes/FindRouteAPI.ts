@@ -38,7 +38,10 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
         if (routeMsg.status === 200) {
             RESULT_DATA['RESULT_DATA'] = {
                 coordinates: routeMsg.data.features[0].geometry.coordinates.map((coordinate: [number, number]) => {
-                    return [coordinate[1], coordinate[0]];
+                    return {
+                        description: "walking",
+                        coordinate: [coordinate[1], coordinate[0]]
+                    };
                 }),
             }
         }
