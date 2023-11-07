@@ -18,12 +18,13 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
         res.send(RESULT_DATA);
     }
 
-    coordinatesList.push(req.body.startCord);
+    coordinatesList.push([req.body.startCord[1], req.body.startCord[0]]);
     if (req.body?.stopover !== undefined) {
-        coordinatesList.push(...req.body.stopover);
+        coordinatesList.push(...req.body.stopover.map((coordinate: [number, number]) => {
+            return [coordinate[1], coordinate[0]];
+        }));
     }
-    coordinatesList.push(req.body.endCord);
-
+    coordinatesList.push([req.body.endCord[1], req.body.endCord[0]]);
     try {
         const routeMsg = await axios.post(URL, {
             coordinates: coordinatesList
@@ -36,7 +37,9 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
         RESULT_DATA["RESULT_MSG"] = routeMsg.statusText;
         if (routeMsg.status === 200) {
             RESULT_DATA['RESULT_DATA'] = {
-                coordinates: routeMsg.data.features[0].geometry.coordinates,
+                coordinates: routeMsg.data.features[0].geometry.coordinates.map((coordinate: [number, number]) => {
+                    return [coordinate[1], coordinate[0]];
+                }),
             }
         }
         res.send(RESULT_DATA);
