@@ -11,6 +11,11 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
         RESULT_MSG: "Ready",
         RESULT_DATA: {}
     }
+    const alternativeRoutesObject = {
+        "target_count": 3,
+        "weight_factor": 2,
+        "share_factor": 1
+    };
 
     if (req.body?.startCord === undefined || req.body?.endCord === undefined) {
         RESULT_DATA['RESULT_CODE'] = 400;
@@ -25,14 +30,21 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
         }));
     }
     coordinatesList.push([req.body.endCord[1], req.body.endCord[0]]);
+
+    alternativeRoutesObject["target_count"] = req.body?.targetCount ?? alternativeRoutesObject["target_count"];
+    alternativeRoutesObject["weight_factor"] = req.body?.targetCount ?? alternativeRoutesObject["weight_factor"];
+    alternativeRoutesObject["share_factor"] = req.body?.targetCount ?? alternativeRoutesObject["share_factor"];
+    //weight_factor 1~2, share_factor 0.1~1
     try {
         const routeMsg = await axios.post(URL, {
-            coordinates: coordinatesList
+            "coordinates": coordinatesList,
+            "alternative_routes": alternativeRoutesObject,
         }, {
             headers: {
                 Authorization: process.env.OPENROUTESERVICE_KEY
             },
         });
+        console.log(routeMsg.status);
         RESULT_DATA["RESULT_CODE"] = routeMsg.status;
         RESULT_DATA["RESULT_MSG"] = routeMsg.statusText;
         if (routeMsg.status === 200) {
