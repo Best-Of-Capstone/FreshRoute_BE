@@ -52,11 +52,19 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
         RESULT_DATA["RESULT_MSG"] = routeMsg.statusText;
         if (routeMsg.status === 200) {
             RESULT_DATA['RESULT_DATA'] = {
-                coordinates: routeMsg.data.features[0].geometry.coordinates.map((coordinate: [number, number]) => {
+                routeList: routeMsg.data.features.map(({geometry: geometry}: any, index: number) => {
                     return {
-                        description: "walking",
-                        coordinate: [coordinate[1], coordinate[0]]
-                    };
+                        id: index,
+                        description: `Route ${index}`,
+                        route: {
+                            coordinates: geometry.coordinates.map((coordinate: [number, number]) => {
+                                return {
+                                    description: "walking",
+                                    coordinate: [coordinate[1], coordinate[0]]
+                                };
+                            }),
+                        }
+                    }
                 }),
             }
         }
