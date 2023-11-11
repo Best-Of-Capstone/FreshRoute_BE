@@ -28,11 +28,6 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
     }
 
     coordinatesList.push([req.body.startCord[1], req.body.startCord[0]]);
-    if (req.body?.stopover !== undefined) {
-        coordinatesList.push(...req.body.stopover.map((coordinate: [number, number]) => {
-            return [coordinate[1], coordinate[0]];
-        }));
-    }
     coordinatesList.push([req.body.endCord[1], req.body.endCord[0]]);
 
     //weight_factor 1~2, share_factor 0.1~1
