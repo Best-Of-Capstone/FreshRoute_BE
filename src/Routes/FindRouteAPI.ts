@@ -3,6 +3,15 @@ import axios, {AxiosError} from "axios";
 
 const findRouteRouter = express.Router();
 
+interface RouteStepDTO {
+    distance: number;
+    duration: number;
+    type: number;
+    instruction: string;
+    name: string;
+    wayPoints: [number, number];
+}
+
 findRouteRouter.post("/", async (req: Request, res: Response) => {
     const URL: string = "https://api.openrouteservice.org/v2/directions/foot-walking/geojson";
     const coordinatesList: [number, number][] = [];
@@ -11,28 +20,28 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
         RESULT_MSG: "Ready",
         RESULT_DATA: {}
     }
+    //weight_factor 1~2, share_factor 0.1~1
     const alternativeRoutesConfig = {
         "target_count": 3,
         "weight_factor": 2,
         "share_factor": 1
     };
-    const instructionTypes = {
-        0: "좌회전", //Left
-        1: "우회전", //Right
-        2: "7시 방향", //Sharp left
-        3: "5시 방향", //Sharp right
-        4: "11시 방향", //Slight left
-        5: "1시 방향", //Slight right
-        6: "직진", //Straight
-        7: "회전교차로 진입", //Enter roundabout
-        8: "회전교차로 탈출", //Exit roundabout
-        9: "유턴", //U-turn
-        10: "목적지 도착", //Goal
-        11: "출발", //Depart
-        12: "왼쪽으로 크게 돌기", //keep left
-        13: "오른쪽으로 크게 돌기", //keep right
-
-    }
+    const instructionTypes = [
+        "좌회전", //Left
+        "우회전", //Right
+        "7시 방향", //Sharp left
+        "5시 방향", //Sharp right
+        "11시 방향", //Slight left
+        "1시 방향", //Slight right
+        "직진", //Straight
+        "회전교차로 진입", //Enter roundabout
+        "회전교차로 탈출", //Exit roundabout
+        "유턴", //U-turn
+        "목적지 도착", //Goal
+        "출발", //Depart
+        "왼쪽으로 크게 돌기", //keep left
+        "오른쪽으로 크게 돌기" //keep right
+    ];
 
     alternativeRoutesConfig["target_count"] = req.body?.targetCount ?? alternativeRoutesConfig["target_count"];
     alternativeRoutesConfig["weight_factor"] = req.body?.targetCount ?? alternativeRoutesConfig["weight_factor"];
@@ -47,7 +56,6 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
     coordinatesList.push([req.body.startCord[1], req.body.startCord[0]]);
     coordinatesList.push([req.body.endCord[1], req.body.endCord[0]]);
 
-    //weight_factor 1~2, share_factor 0.1~1
     try {
         const body = alternativeRoutesConfig.target_count === 1 ? {
             "coordinates": coordinatesList,
@@ -75,7 +83,15 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
                         route: {
                             distance: detailRouteInfo.distance,
                             duration: detailRouteInfo.duration,
-                            steps: detailRouteInfo.steps,
+                            steps: detailRouteInfo.steps.map((step: RouteStepDTO) => {
+                                return {
+                                    distance: step.distance,
+                                    duration: step.duration,
+                                    type: instructionTypes[step.type],
+                                    name: step.name,
+                                    wayPoints: step.wayPoints,
+                                }
+                            }),
                             coordinates: geometry.coordinates.map((coordinate: [number, number]) => {
                                 return [coordinate[1], coordinate[0]];
                             }),
