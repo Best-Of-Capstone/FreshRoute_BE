@@ -9,7 +9,7 @@ interface RouteStepDTO {
     type: number;
     instruction: string;
     name: string;
-    wayPoints: [number, number];
+    way_points: [number, number];
 }
 
 findRouteRouter.post("/", async (req: Request, res: Response) => {
@@ -89,7 +89,7 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
                                     duration: step.duration,
                                     type: instructionTypes[step.type],
                                     name: step.name,
-                                    wayPoints: step.wayPoints,
+                                    wayPoints: step.way_points,
                                 }
                             }),
                             coordinates: geometry.coordinates.map((coordinate: [number, number]) => {
