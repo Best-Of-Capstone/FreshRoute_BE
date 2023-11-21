@@ -9,7 +9,7 @@ interface RouteStepDTO {
     type: number;
     instruction: string;
     name: string;
-    wayPoints: [number, number];
+    way_points: [number, number];
 }
 
 findRouteRouter.post("/", async (req: Request, res: Response) => {
