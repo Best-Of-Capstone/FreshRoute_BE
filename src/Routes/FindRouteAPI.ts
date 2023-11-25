@@ -12,8 +12,12 @@ interface RouteStepDTO {
     way_points: [number, number];
 }
 
+interface RouteBodyDTO {
+    [key: string]: any;
+}
+
 findRouteRouter.post("/", async (req: Request, res: Response) => {
-    const URL: string = "https://api.openrouteservice.org/v2/directions/foot-walking/geojson";
+    const routeURL: string = "https://api.openrouteservice.org/v2/directions/foot-walking/geojson";
     const coordinatesList: [number, number][] = [];
     const RESULT_DATA = {
         RESULT_CODE: 0,
@@ -57,13 +61,14 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
     coordinatesList.push([req.body.endCord[1], req.body.endCord[0]]);
 
     try {
-        const body = alternativeRoutesConfig.target_count === 1 ? {
+        const body: RouteBodyDTO = alternativeRoutesConfig.target_count === 1 ? {
             "coordinates": coordinatesList,
         } : {
             "coordinates": coordinatesList,
             "alternative_routes": alternativeRoutesConfig,
         }
-        const routeMsg = await axios.post(URL, body, {
+        
+        const routeMsg = await axios.post(routeURL, body, {
             headers: {
                 Authorization: process.env.OPENROUTESERVICE_KEY
             },
