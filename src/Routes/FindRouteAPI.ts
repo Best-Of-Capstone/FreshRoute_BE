@@ -67,7 +67,7 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
             "coordinates": coordinatesList,
             "alternative_routes": alternativeRoutesConfig,
         }
-        
+        body["elevation"] = true;
         const routeMsg = await axios.post(routeURL, body, {
             headers: {
                 Authorization: process.env.OPENROUTESERVICE_KEY
@@ -82,23 +82,29 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
                                                            properties: properties
                                                        }: any, index: number) => {
                     const detailRouteInfo = properties.segments[0];
+                    const elevationList = geometry.coordinates.map((coordinate: [number, number, number]) => {
+                        return coordinate[2];
+                    });
                     return {
                         id: index,
                         description: `Route ${index}`,
                         route: {
                             distance: detailRouteInfo.distance,
                             duration: detailRouteInfo.duration,
+                            ascent: properties.ascent,
+                            descent: properties.descent,
                             steps: detailRouteInfo.steps.map((step: RouteStepDTO) => {
                                 return {
                                     distance: step.distance,
                                     duration: step.duration,
                                     type: instructionTypes[step.type],
                                     name: step.name,
+                                    elevationDelta: elevationList[step.way_points[1]] - elevationList[step.way_points[0]],
                                     wayPoints: step.way_points,
                                 }
                             }),
-                            coordinates: geometry.coordinates.map((coordinate: [number, number]) => {
-                                return [coordinate[1], coordinate[0]];
+                            coordinates: geometry.coordinates.map((coordinate: [number, number, number]) => {
+                                return [coordinate[1], coordinate[0], coordinate[2]];
                             }),
                         }
                     }
