@@ -16,6 +16,85 @@ interface RouteBodyDTO {
     [key: string]: any;
 }
 
+const findWalkRoute = async (body: any) => {
+    const instructionTypes = [
+        "좌회전", //Left
+        "우회전", //Right
+        "7시 방향", //Sharp left
+        "5시 방향", //Sharp right
+        "11시 방향", //Slight left
+        "1시 방향", //Slight right
+        "직진", //Straight
+        "회전교차로 진입", //Enter roundabout
+        "회전교차로 탈출", //Exit roundabout
+        "유턴", //U-turn
+        "목적지 도착", //Goal
+        "출발", //Depart
+        "왼쪽으로 크게 돌기", //keep left
+        "오른쪽으로 크게 돌기" //keep right
+    ];
+    const routeURL: string = "https://api.openrouteservice.org/v2/directions/foot-walking/geojson";
+    const coordinatesList: [number, number][] = [];
+    const RESULT_DATA = {
+        RESULT_CODE: 0,
+        RESULT_MSG: "Ready",
+        RESULT_DATA: {}
+    }
+    const routeMsg = await axios.post(routeURL, body, {
+        headers: {
+            Authorization: process.env.OPENROUTESERVICE_KEY
+        },
+    });
+    RESULT_DATA["RESULT_CODE"] = routeMsg.status;
+    RESULT_DATA["RESULT_MSG"] = routeMsg.statusText;
+    try {
+        if (routeMsg.status === 200) {
+            RESULT_DATA['RESULT_DATA'] = {
+                routeList: routeMsg.data.features.map(({
+                                                           geometry: geometry,
+                                                           properties: properties
+                                                       }: any, index: number) => {
+                    const detailRouteInfo = properties.segments[0];
+                    const elevationList = geometry.coordinates.map((coordinate: [number, number, number]) => {
+                        return coordinate[2];
+                    });
+                    return {
+                        id: index,
+                        description: `Route ${index}`,
+                        route: {
+                            distance: detailRouteInfo.distance,
+                            duration: detailRouteInfo.duration,
+                            ascent: properties.ascent,
+                            descent: properties.descent,
+                            steps: detailRouteInfo.steps.map((step: RouteStepDTO) => {
+                                return {
+                                    distance: step.distance,
+                                    duration: step.duration,
+                                    type: instructionTypes[step.type],
+                                    name: step.name,
+                                    elevationDelta: elevationList[step.way_points[1]] - elevationList[step.way_points[0]],
+                                    wayPoints: step.way_points,
+                                }
+                            }),
+                            coordinates: geometry.coordinates.map((coordinate: [number, number, number]) => {
+                                return [coordinate[1], coordinate[0], coordinate[2]];
+                            }),
+                        }
+                    }
+                }),
+            }
+        }
+        return RESULT_DATA;
+    } catch (err) {
+        if (err instanceof AxiosError) {
+            RESULT_DATA["RESULT_CODE"] = err.response?.status ?? 404;
+            RESULT_DATA["RESULT_MSG"] = err.response?.data.error.message ?? "Internal Server Error";
+            return RESULT_DATA;
+        }
+    }
+
+}
+
 findRouteRouter.post("/", async (req: Request, res: Response) => {
     const routeURL: string = "https://api.openrouteservice.org/v2/directions/foot-walking/geojson";
     const coordinatesList: [number, number][] = [];
@@ -68,49 +147,8 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
             "alternative_routes": alternativeRoutesConfig,
         }
         body["elevation"] = true;
-        const routeMsg = await axios.post(routeURL, body, {
-            headers: {
-                Authorization: process.env.OPENROUTESERVICE_KEY
-            },
-        });
-        RESULT_DATA["RESULT_CODE"] = routeMsg.status;
-        RESULT_DATA["RESULT_MSG"] = routeMsg.statusText;
-        if (routeMsg.status === 200) {
-            RESULT_DATA['RESULT_DATA'] = {
-                routeList: routeMsg.data.features.map(({
-                                                           geometry: geometry,
-                                                           properties: properties
-                                                       }: any, index: number) => {
-                    const detailRouteInfo = properties.segments[0];
-                    const elevationList = geometry.coordinates.map((coordinate: [number, number, number]) => {
-                        return coordinate[2];
-                    });
-                    return {
-                        id: index,
-                        description: `Route ${index}`,
-                        route: {
-                            distance: detailRouteInfo.distance,
-                            duration: detailRouteInfo.duration,
-                            ascent: properties.ascent,
-                            descent: properties.descent,
-                            steps: detailRouteInfo.steps.map((step: RouteStepDTO) => {
-                                return {
-                                    distance: step.distance,
-                                    duration: step.duration,
-                                    type: instructionTypes[step.type],
-                                    name: step.name,
-                                    elevationDelta: elevationList[step.way_points[1]] - elevationList[step.way_points[0]],
-                                    wayPoints: step.way_points,
-                                }
-                            }),
-                            coordinates: geometry.coordinates.map((coordinate: [number, number, number]) => {
-                                return [coordinate[1], coordinate[0], coordinate[2]];
-                            }),
-                        }
-                    }
-                }),
-            }
-        }
+        const RESULT_WALK_DATA = await findWalkRoute(body);
+        console.dir(RESULT_WALK_DATA?.RESULT_DATA);
 
         try {
             const testURL: string = "https://asia-northeast3-spring-market-404709.cloudfunctions.net/function-2"
