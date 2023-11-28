@@ -25,7 +25,7 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
         RESULT_DATA: {}
     }
     //weight_factor 1~2, share_factor 0.1~1
-    const alternativeRoutesConfig = {
+    const alternativeRoutesConfig: any = {
         "target_count": 3,
         "weight_factor": 2,
         "share_factor": 1
@@ -111,6 +111,35 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
                 }),
             }
         }
+
+        try {
+            const testURL: string = "https://asia-northeast3-spring-market-404709.cloudfunctions.net/function-2"
+            const testBODY = {
+                "startCord": [req.body.startCord[0], req.body.startCord[1]],
+                "endCord": [req.body.endCord[0], req.body.endCord[1]]
+            }
+            const testData = await axios.post(testURL, testBODY);
+            // console.dir(testData.data.data.RESULT_DATA.routeList[0].route.steps);
+            const routeList = testData.data.data.RESULT_DATA.routeList;
+            routeList.map(({route}: any) => {
+                const coordinates = route.coordinates;
+                const steps = route.steps;
+                const filter_steps = steps.filter((element: any) => {
+                    return element.type === "지하철 탑승";
+                });
+                console.dir(filter_steps);
+            })
+            console.log("----");
+        } catch (e) {
+            console.dir(e);
+        }
+        // X역에서 N호선 탑승
+        // XX역에서 N호선 환승
+        // XX역에서 N호선 하차
+        //
+        // XX 정류장에서 N번 버스 탑승
+        // XX 정류장에서 N번 버스 환승
+        // XX 정류장에서 N번 버스 하차
         res.send(RESULT_DATA);
     } catch (err) {
         if (err instanceof AxiosError) {
