@@ -92,11 +92,10 @@ const findWalkRoute = async (body: any) => {
             return RESULT_DATA;
         }
     }
-
 }
 
 findRouteRouter.post("/", async (req: Request, res: Response) => {
-    const routeURL: string = "https://api.openrouteservice.org/v2/directions/foot-walking/geojson";
+    const transportURL: string = "https://asia-northeast3-spring-market-404709.cloudfunctions.net/function-2"
     const coordinatesList: [number, number][] = [];
     const RESULT_DATA = {
         RESULT_CODE: 0,
@@ -109,22 +108,6 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
         "weight_factor": 2,
         "share_factor": 1
     };
-    const instructionTypes = [
-        "좌회전", //Left
-        "우회전", //Right
-        "7시 방향", //Sharp left
-        "5시 방향", //Sharp right
-        "11시 방향", //Slight left
-        "1시 방향", //Slight right
-        "직진", //Straight
-        "회전교차로 진입", //Enter roundabout
-        "회전교차로 탈출", //Exit roundabout
-        "유턴", //U-turn
-        "목적지 도착", //Goal
-        "출발", //Depart
-        "왼쪽으로 크게 돌기", //keep left
-        "오른쪽으로 크게 돌기" //keep right
-    ];
 
     alternativeRoutesConfig["target_count"] = req.body?.targetCount ?? alternativeRoutesConfig["target_count"];
     alternativeRoutesConfig["weight_factor"] = req.body?.targetCount ?? alternativeRoutesConfig["weight_factor"];
@@ -140,37 +123,35 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
     coordinatesList.push([req.body.endCord[1], req.body.endCord[0]]);
 
     try {
-        const body: RouteBodyDTO = alternativeRoutesConfig.target_count === 1 ? {
+        const walkBody: RouteBodyDTO = alternativeRoutesConfig.target_count === 1 ? {
             "coordinates": coordinatesList,
         } : {
             "coordinates": coordinatesList,
             "alternative_routes": alternativeRoutesConfig,
         }
-        body["elevation"] = true;
-        const RESULT_WALK_DATA = await findWalkRoute(body);
-        console.dir(RESULT_WALK_DATA?.RESULT_DATA);
+        walkBody["elevation"] = true;
 
-        try {
-            const testURL: string = "https://asia-northeast3-spring-market-404709.cloudfunctions.net/function-2"
-            const testBODY = {
-                "startCord": [req.body.startCord[0], req.body.startCord[1]],
-                "endCord": [req.body.endCord[0], req.body.endCord[1]]
-            }
-            const testData = await axios.post(testURL, testBODY);
-            // console.dir(testData.data.data.RESULT_DATA.routeList[0].route.steps);
-            const routeList = testData.data.data.RESULT_DATA.routeList;
-            routeList.map(({route}: any) => {
-                const coordinates = route.coordinates;
-                const steps = route.steps;
-                const filter_steps = steps.filter((element: any) => {
-                    return element.type === "지하철 탑승";
-                });
-                console.dir(filter_steps);
-            })
-            console.log("----");
-        } catch (e) {
-            console.dir(e);
+        const transportBODY = {
+            "startCord": [req.body.startCord[0], req.body.startCord[1]],
+            "endCord": [req.body.endCord[0], req.body.endCord[1]]
         }
+        const transportData = await axios.post(transportURL, transportBODY);
+        const tmpRouteList = transportData.data.data.RESULT_DATA.routeList;
+        tmpRouteList.map(async ({route}: any) => {
+            const {coordinates, distance, duration, endTransport, startTransport} = route;
+            // 시작점에서 대중교통 출발지까지 경로를 result_walk_first에 저장
+            walkBody["coordinates"] = [coordinatesList[0], [startTransport[1], startTransport[0]]];
+            const result_walk_first = await findWalkRoute(walkBody);
+
+            // 대중교통 도착지에서 도착지까지 경로를 result_walk_second에 저장
+            walkBody["coordinates"] = [[endTransport[1], endTransport[0]], coordinatesList[1]];
+            const result_walk_second = await findWalkRoute(walkBody);
+
+            console.dir(result_walk_first?.RESULT_DATA);
+            console.dir("---------------");
+            console.dir(result_walk_second?.RESULT_DATA);
+        })
+        console.log("----");
         // X역에서 N호선 탑승
         // XX역에서 N호선 환승
         // XX역에서 N호선 하차
