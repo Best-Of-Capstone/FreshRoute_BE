@@ -1,6 +1,6 @@
 import express, {Request, Response} from "express";
 import axios, {AxiosError} from "axios";
-import {ResultMSGDTO, RouteBodyDTO, RouteListDTO, RouteStepDTO} from "../Types/types";
+import {ResultMSGDTO, RouteBodyDTO, RouteListDTO, RouteStepDTO, StepDTO} from "../Types/types";
 
 const findRouteRouter = express.Router();
 
@@ -62,6 +62,7 @@ const findWalkRoute = async (body: any): Promise<ResultMSGDTO> => {
                                     name: step.name,
                                     elevationDelta: elevationList[step.way_points[1]] - elevationList[step.way_points[0]],
                                     wayPoints: step.way_points,
+                                    isWalking: true,
                                 }
                             }),
                             coordinates: geometry.coordinates.map((coordinate: [number, number, number]) => {
@@ -126,14 +127,22 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
         }
         const transportData = await axios.post(transportURL, transportBODY);
         const tmpRouteList = transportData.data.data.RESULT_DATA.routeList;
-        tmpRouteList.map(async ({route}: any) => {
+        const subResultData: RouteListDTO[] = [];
+        let index = 0;
+        for (const {route} of tmpRouteList) {
             const {
                 coordinates: transCoordinates,
                 distance: transDistance,
                 duration: transDuration,
                 endTransport,
-                startTransport
+                startTransport,
+                steps
             } = route;
+            const transCoordinatesLength: number = transCoordinates.length;
+            transCoordinates.forEach((_: any, index: number, array: any) => {
+                array[index] = [array[index][1], array[index][0], 0];
+            });
+
             // 시작점에서 대중교통 출발지까지 경로를 result_walk_first에 저장
             walkBody["coordinates"] = [coordinatesList[0], [startTransport[1], startTransport[0]]];
             const result_walk_first: ResultMSGDTO = await findWalkRoute(walkBody);
@@ -149,21 +158,60 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
                 res.send(result_walk_second);
             }
 
-            result_walk_first.RESULT_DATA.routeList?.map(({route}: RouteListDTO) => {
-                console.dir(route);
-                console.dir("---------------");
+            result_walk_first.RESULT_DATA.routeList?.forEach(({route: routeListElementFirst}: RouteListDTO) => {
+                const firstCordLength: number = routeListElementFirst.coordinates.length;
+                result_walk_second.RESULT_DATA.routeList?.forEach(({route: routeListElementSecond}: RouteListDTO) => {
+                    const totalDistance: number = routeListElementFirst.distance + transDistance + routeListElementSecond.distance;
+                    const totalDuration: number = routeListElementFirst.duration + transDuration + routeListElementSecond.distance;
+                    const transSteps: StepDTO[] = steps.map((step: any): StepDTO => {
+                        return {
+                            distance: step.distance,
+                            duration: step.duration,
+                            name: step.name,
+                            type: step.type,
+                            wayPoints: [step.wayPoints[0] + firstCordLength, step.wayPoints[1] + firstCordLength],
+                            isWalking: false,
+                            elevationDelta: 0
+                        }
+                    });
+
+                    const routeListElementSecondSteps: StepDTO[] = routeListElementSecond.steps.map((step: StepDTO): StepDTO => {
+                        return {
+                            distance: step.distance,
+                            duration: step.duration,
+                            type: step.type,
+                            isWalking: step.isWalking,
+                            name: step.name,
+                            elevationDelta: step.elevationDelta,
+                            wayPoints: [
+                                step.wayPoints[0] + firstCordLength + transCoordinatesLength,
+                                step.wayPoints[1] + firstCordLength + transCoordinatesLength
+                            ]
+                        }
+                    });
+
+                    const subRouteList: RouteListDTO = {
+                        id: index,
+                        description: `Route ${index}`,
+                        route: {
+                            distance: totalDistance,
+                            duration: totalDuration,
+                            ascent: (routeListElementFirst.ascent + routeListElementSecond.ascent) / 2,
+                            descent: (routeListElementFirst.descent + routeListElementSecond.descent) / 2,
+                            coordinates: [...routeListElementFirst.coordinates, ...transCoordinates, ...routeListElementSecond.coordinates],
+                            steps: [...routeListElementFirst.steps, ...transSteps, ...routeListElementSecondSteps]
+                        }
+                    }
+                    subResultData.push(subRouteList);
+                    index++;
+                });
             });
-            // console.dir(result_walk_first.RESULT_DATA.routeList);
-            // console.dir(result_walk_second?.RESULT_DATA.routeList);
-        })
-        console.log("----");
-        // X역에서 N호선 탑승
-        // XX역에서 N호선 환승
-        // XX역에서 N호선 하차
-        //
-        // XX 정류장에서 N번 버스 탑승
-        // XX 정류장에서 N번 버스 환승
-        // XX 정류장에서 N번 버스 하차
+        }
+        RESULT_DATA.RESULT_CODE = 200;
+        RESULT_DATA.RESULT_MSG = "Success";
+        RESULT_DATA.RESULT_DATA = {
+            routeList: subResultData
+        }
         res.send(RESULT_DATA);
     } catch (err) {
         if (err instanceof AxiosError) {
