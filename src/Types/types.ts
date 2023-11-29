@@ -1,4 +1,4 @@
-interface RouteStepDTO {
+export interface RouteStepDTO {
     distance: number;
     duration: number;
     type: number;
@@ -7,11 +7,11 @@ interface RouteStepDTO {
     way_points: [number, number];
 }
 
-interface RouteBodyDTO {
+export interface RouteBodyDTO {
     [key: string]: any;
 }
 
-interface RouteDTO {
+export interface RouteDTO {
     distance: number;
     duration: number;
     ascent: number;
@@ -19,13 +19,13 @@ interface RouteDTO {
     steps: [number, number, number];
 }
 
-interface RouteListDTO {
+export interface RouteListDTO {
     id: number;
     description: string;
     route: RouteDTO
 }
 
-interface ResultMSGDTO {
+export interface ResultMSGDTO {
     RESULT_CODE: number;
     RESULT_MSG: string;
     RESULT_DATA: {

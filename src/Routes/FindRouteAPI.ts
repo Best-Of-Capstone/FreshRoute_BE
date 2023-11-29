@@ -1,5 +1,6 @@
 import express, {Request, Response} from "express";
 import axios, {AxiosError} from "axios";
+import {ResultMSGDTO, RouteBodyDTO, RouteListDTO, RouteStepDTO} from "../Types/types";
 
 const findRouteRouter = express.Router();
 
@@ -126,7 +127,13 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
         const transportData = await axios.post(transportURL, transportBODY);
         const tmpRouteList = transportData.data.data.RESULT_DATA.routeList;
         tmpRouteList.map(async ({route}: any) => {
-            const {coordinates, distance, duration, endTransport, startTransport} = route;
+            const {
+                coordinates: transCoordinates,
+                distance: transDistance,
+                duration: transDuration,
+                endTransport,
+                startTransport
+            } = route;
             // 시작점에서 대중교통 출발지까지 경로를 result_walk_first에 저장
             walkBody["coordinates"] = [coordinatesList[0], [startTransport[1], startTransport[0]]];
             const result_walk_first: ResultMSGDTO = await findWalkRoute(walkBody);
@@ -135,9 +142,19 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
             walkBody["coordinates"] = [[endTransport[1], endTransport[0]], coordinatesList[1]];
             const result_walk_second: ResultMSGDTO = await findWalkRoute(walkBody);
 
-            console.dir(result_walk_first.RESULT_DATA.routeList);
-            console.dir("---------------");
-            console.dir(result_walk_second?.RESULT_DATA.routeList);
+            if (result_walk_first.RESULT_CODE !== 200) {
+                res.send(result_walk_first);
+            }
+            if (result_walk_second.RESULT_CODE !== 200) {
+                res.send(result_walk_second);
+            }
+
+            result_walk_first.RESULT_DATA.routeList?.map(({route}: RouteListDTO) => {
+                console.dir(route);
+                console.dir("---------------");
+            });
+            // console.dir(result_walk_first.RESULT_DATA.routeList);
+            // console.dir(result_walk_second?.RESULT_DATA.routeList);
         })
         console.log("----");
         // X역에서 N호선 탑승
