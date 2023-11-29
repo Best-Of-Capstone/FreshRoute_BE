@@ -16,13 +16,29 @@ interface RouteBodyDTO {
     [key: string]: any;
 }
 
+interface RouteDTO {
+    distance: number;
+    duration: number;
+    ascent: number;
+    descent: number;
+    steps: [number, number, number];
+}
+
+interface RouteListDTO {
+    id: number;
+    description: string;
+    route: RouteDTO
+}
+
 interface ResultMSGDTO {
     RESULT_CODE: number;
     RESULT_MSG: string;
-    RESULT_DATA: object;
+    RESULT_DATA: {
+        routeList?: RouteListDTO[];
+    };
 }
 
-const findWalkRoute = async (body: any) => {
+const findWalkRoute = async (body: any): Promise<ResultMSGDTO> => {
     const instructionTypes = [
         "좌회전", //Left
         "우회전", //Right
@@ -41,7 +57,7 @@ const findWalkRoute = async (body: any) => {
     ];
     const routeURL: string = "https://api.openrouteservice.org/v2/directions/foot-walking/geojson";
     const coordinatesList: [number, number][] = [];
-    const RESULT_DATA = {
+    const RESULT_DATA: ResultMSGDTO = {
         RESULT_CODE: 0,
         RESULT_MSG: "Ready",
         RESULT_DATA: {}
@@ -97,13 +113,14 @@ const findWalkRoute = async (body: any) => {
             RESULT_DATA["RESULT_MSG"] = err.response?.data.error.message ?? "Internal Server Error";
             return RESULT_DATA;
         }
+        return RESULT_DATA;
     }
 }
 
 findRouteRouter.post("/", async (req: Request, res: Response) => {
     const transportURL: string = "https://asia-northeast3-spring-market-404709.cloudfunctions.net/function-2"
     const coordinatesList: [number, number][] = [];
-    const RESULT_DATA = {
+    const RESULT_DATA: ResultMSGDTO = {
         RESULT_CODE: 0,
         RESULT_MSG: "Ready",
         RESULT_DATA: {}
@@ -147,15 +164,15 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
             const {coordinates, distance, duration, endTransport, startTransport} = route;
             // 시작점에서 대중교통 출발지까지 경로를 result_walk_first에 저장
             walkBody["coordinates"] = [coordinatesList[0], [startTransport[1], startTransport[0]]];
-            const result_walk_first = await findWalkRoute(walkBody);
+            const result_walk_first: ResultMSGDTO = await findWalkRoute(walkBody);
 
             // 대중교통 도착지에서 도착지까지 경로를 result_walk_second에 저장
             walkBody["coordinates"] = [[endTransport[1], endTransport[0]], coordinatesList[1]];
-            const result_walk_second = await findWalkRoute(walkBody);
+            const result_walk_second: ResultMSGDTO = await findWalkRoute(walkBody);
 
-            console.dir(result_walk_first?.RESULT_DATA);
+            console.dir(result_walk_first.RESULT_DATA.routeList);
             console.dir("---------------");
-            console.dir(result_walk_second?.RESULT_DATA);
+            console.dir(result_walk_second?.RESULT_DATA.routeList);
         })
         console.log("----");
         // X역에서 N호선 탑승
