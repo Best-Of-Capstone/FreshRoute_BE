@@ -16,6 +16,12 @@ interface RouteBodyDTO {
     [key: string]: any;
 }
 
+interface ResultMSGDTO {
+    RESULT_CODE: number;
+    RESULT_MSG: string;
+    RESULT_DATA: object;
+}
+
 const findWalkRoute = async (body: any) => {
     const instructionTypes = [
         "좌회전", //Left
