@@ -22,7 +22,6 @@ const findWalkRoute = async (body: any): Promise<ResultMSGDTO> => {
         "오른쪽으로 크게 돌기" //keep right
     ];
     const routeURL: string = "https://api.openrouteservice.org/v2/directions/foot-walking/geojson";
-    const coordinatesList: [number, number][] = [];
     const RESULT_DATA: ResultMSGDTO = {
         RESULT_CODE: 0,
         RESULT_MSG: "Ready",
