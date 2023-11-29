@@ -1,35 +1,10 @@
 import express, {Request, Response} from "express";
 import axios, {AxiosError} from "axios";
+import {ResultMSGDTO, RouteBodyDTO, RouteListDTO, RouteStepDTO, StepDTO} from "../Types/types";
 
 const findRouteRouter = express.Router();
 
-interface RouteStepDTO {
-    distance: number;
-    duration: number;
-    type: number;
-    instruction: string;
-    name: string;
-    way_points: [number, number];
-}
-
-interface RouteBodyDTO {
-    [key: string]: any;
-}
-
-findRouteRouter.post("/", async (req: Request, res: Response) => {
-    const routeURL: string = "https://api.openrouteservice.org/v2/directions/foot-walking/geojson";
-    const coordinatesList: [number, number][] = [];
-    const RESULT_DATA = {
-        RESULT_CODE: 0,
-        RESULT_MSG: "Ready",
-        RESULT_DATA: {}
-    }
-    //weight_factor 1~2, share_factor 0.1~1
-    const alternativeRoutesConfig = {
-        "target_count": 3,
-        "weight_factor": 2,
-        "share_factor": 1
-    };
+const findWalkRoute = async (body: any): Promise<ResultMSGDTO> => {
     const instructionTypes = [
         "좌회전", //Left
         "우회전", //Right
@@ -46,35 +21,20 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
         "왼쪽으로 크게 돌기", //keep left
         "오른쪽으로 크게 돌기" //keep right
     ];
-
-    alternativeRoutesConfig["target_count"] = req.body?.targetCount ?? alternativeRoutesConfig["target_count"];
-    alternativeRoutesConfig["weight_factor"] = req.body?.targetCount ?? alternativeRoutesConfig["weight_factor"];
-    alternativeRoutesConfig["share_factor"] = req.body?.targetCount ?? alternativeRoutesConfig["share_factor"];
-
-    if (req.body?.startCord === undefined || req.body?.endCord === undefined) {
-        RESULT_DATA['RESULT_CODE'] = 400;
-        RESULT_DATA['RESULT_MSG'] = "body must have startCord property and endCord property";
-        res.send(RESULT_DATA);
+    const routeURL: string = "https://api.openrouteservice.org/v2/directions/foot-walking/geojson";
+    const RESULT_DATA: ResultMSGDTO = {
+        RESULT_CODE: 0,
+        RESULT_MSG: "Ready",
+        RESULT_DATA: {}
     }
-
-    coordinatesList.push([req.body.startCord[1], req.body.startCord[0]]);
-    coordinatesList.push([req.body.endCord[1], req.body.endCord[0]]);
-
+    const routeMsg = await axios.post(routeURL, body, {
+        headers: {
+            Authorization: process.env.OPENROUTESERVICE_KEY
+        },
+    });
+    RESULT_DATA["RESULT_CODE"] = routeMsg.status;
+    RESULT_DATA["RESULT_MSG"] = routeMsg.statusText;
     try {
-        const body: RouteBodyDTO = alternativeRoutesConfig.target_count === 1 ? {
-            "coordinates": coordinatesList,
-        } : {
-            "coordinates": coordinatesList,
-            "alternative_routes": alternativeRoutesConfig,
-        }
-        body["elevation"] = true;
-        const routeMsg = await axios.post(routeURL, body, {
-            headers: {
-                Authorization: process.env.OPENROUTESERVICE_KEY
-            },
-        });
-        RESULT_DATA["RESULT_CODE"] = routeMsg.status;
-        RESULT_DATA["RESULT_MSG"] = routeMsg.statusText;
         if (routeMsg.status === 200) {
             RESULT_DATA['RESULT_DATA'] = {
                 routeList: routeMsg.data.features.map(({
@@ -101,6 +61,7 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
                                     name: step.name,
                                     elevationDelta: elevationList[step.way_points[1]] - elevationList[step.way_points[0]],
                                     wayPoints: step.way_points,
+                                    isWalking: true,
                                 }
                             }),
                             coordinates: geometry.coordinates.map((coordinate: [number, number, number]) => {
@@ -110,6 +71,145 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
                     }
                 }),
             }
+        }
+        return RESULT_DATA;
+    } catch (err) {
+        if (err instanceof AxiosError) {
+            RESULT_DATA["RESULT_CODE"] = err.response?.status ?? 404;
+            RESULT_DATA["RESULT_MSG"] = err.response?.data.error.message ?? "Internal Server Error";
+            return RESULT_DATA;
+        }
+        return RESULT_DATA;
+    }
+}
+
+findRouteRouter.post("/", async (req: Request, res: Response) => {
+    const transportURL: string = "https://asia-northeast3-spring-market-404709.cloudfunctions.net/function-2"
+    const coordinatesList: [number, number][] = [];
+    const RESULT_DATA: ResultMSGDTO = {
+        RESULT_CODE: 0,
+        RESULT_MSG: "Ready",
+        RESULT_DATA: {}
+    }
+    //weight_factor 1~2, share_factor 0.1~1
+    const alternativeRoutesConfig: any = {
+        "target_count": 3,
+        "weight_factor": 2,
+        "share_factor": 1
+    };
+
+    alternativeRoutesConfig["target_count"] = req.body?.targetCount ?? alternativeRoutesConfig["target_count"];
+    alternativeRoutesConfig["weight_factor"] = req.body?.targetCount ?? alternativeRoutesConfig["weight_factor"];
+    alternativeRoutesConfig["share_factor"] = req.body?.targetCount ?? alternativeRoutesConfig["share_factor"];
+
+    if (req.body?.startCord === undefined || req.body?.endCord === undefined) {
+        RESULT_DATA['RESULT_CODE'] = 400;
+        RESULT_DATA['RESULT_MSG'] = "body must have startCord property and endCord property";
+        res.send(RESULT_DATA);
+    }
+
+    coordinatesList.push([req.body.startCord[1], req.body.startCord[0]]);
+    coordinatesList.push([req.body.endCord[1], req.body.endCord[0]]);
+
+    try {
+        const walkBody: RouteBodyDTO = alternativeRoutesConfig.target_count === 1 ? {
+            "coordinates": coordinatesList,
+        } : {
+            "coordinates": coordinatesList,
+            "alternative_routes": alternativeRoutesConfig,
+        }
+        walkBody["elevation"] = true;
+
+        const transportBODY = {
+            "startCord": [req.body.startCord[0], req.body.startCord[1]],
+            "endCord": [req.body.endCord[0], req.body.endCord[1]]
+        }
+        const transportData = await axios.post(transportURL, transportBODY);
+        const tmpRouteList = transportData.data.data.RESULT_DATA.routeList;
+        const subResultData: RouteListDTO[] = [];
+        let index = 0;
+        for (const {route} of tmpRouteList) {
+            const {
+                coordinates: transCoordinates,
+                distance: transDistance,
+                duration: transDuration,
+                endTransport,
+                startTransport,
+                steps
+            } = route;
+            const transCoordinatesLength: number = transCoordinates.length;
+            transCoordinates.forEach((_: any, index: number, array: any) => {
+                array[index] = [array[index][1], array[index][0], 0];
+            });
+
+            // 시작점에서 대중교통 출발지까지 경로를 result_walk_first에 저장
+            walkBody["coordinates"] = [coordinatesList[0], [startTransport[1], startTransport[0]]];
+            const result_walk_first: ResultMSGDTO = await findWalkRoute(walkBody);
+
+            // 대중교통 도착지에서 도착지까지 경로를 result_walk_second에 저장
+            walkBody["coordinates"] = [[endTransport[1], endTransport[0]], coordinatesList[1]];
+            const result_walk_second: ResultMSGDTO = await findWalkRoute(walkBody);
+
+            if (result_walk_first.RESULT_CODE !== 200) {
+                res.send(result_walk_first);
+            }
+            if (result_walk_second.RESULT_CODE !== 200) {
+                res.send(result_walk_second);
+            }
+
+            result_walk_first.RESULT_DATA.routeList?.forEach(({route: routeListElementFirst}: RouteListDTO) => {
+                const firstCordLength: number = routeListElementFirst.coordinates.length;
+                result_walk_second.RESULT_DATA.routeList?.forEach(({route: routeListElementSecond}: RouteListDTO) => {
+                    const totalDistance: number = routeListElementFirst.distance + transDistance + routeListElementSecond.distance;
+                    const totalDuration: number = routeListElementFirst.duration + transDuration + routeListElementSecond.distance;
+                    const transSteps: StepDTO[] = steps.map((step: any): StepDTO => {
+                        return {
+                            distance: step.distance,
+                            duration: step.duration,
+                            name: step.name,
+                            type: step.type,
+                            wayPoints: [step.wayPoints[0] + firstCordLength, step.wayPoints[1] + firstCordLength],
+                            isWalking: false,
+                            elevationDelta: 0
+                        }
+                    });
+
+                    const routeListElementSecondSteps: StepDTO[] = routeListElementSecond.steps.map((step: StepDTO): StepDTO => {
+                        return {
+                            distance: step.distance,
+                            duration: step.duration,
+                            type: step.type,
+                            isWalking: step.isWalking,
+                            name: step.name,
+                            elevationDelta: step.elevationDelta,
+                            wayPoints: [
+                                step.wayPoints[0] + firstCordLength + transCoordinatesLength,
+                                step.wayPoints[1] + firstCordLength + transCoordinatesLength
+                            ]
+                        }
+                    });
+
+                    const subRouteList: RouteListDTO = {
+                        id: index,
+                        description: `Route ${index}`,
+                        route: {
+                            distance: totalDistance,
+                            duration: totalDuration,
+                            ascent: (routeListElementFirst.ascent + routeListElementSecond.ascent) / 2,
+                            descent: (routeListElementFirst.descent + routeListElementSecond.descent) / 2,
+                            coordinates: [...routeListElementFirst.coordinates, ...transCoordinates, ...routeListElementSecond.coordinates],
+                            steps: [...routeListElementFirst.steps, ...transSteps, ...routeListElementSecondSteps]
+                        }
+                    }
+                    subResultData.push(subRouteList);
+                    index++;
+                });
+            });
+        }
+        RESULT_DATA.RESULT_CODE = 200;
+        RESULT_DATA.RESULT_MSG = "Success";
+        RESULT_DATA.RESULT_DATA = {
+            routeList: subResultData
         }
         res.send(RESULT_DATA);
     } catch (err) {
