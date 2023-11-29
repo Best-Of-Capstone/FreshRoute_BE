@@ -11,12 +11,29 @@ export interface RouteBodyDTO {
     [key: string]: any;
 }
 
+export interface StepDTO {
+    distance: number;
+    duration: number;
+    type: string;
+    isWalking: boolean;
+    name: string;
+    elevationDelta: number;
+    wayPoints: [number, number];
+}
+
+interface CoordinateDTO {
+    latitude: number;
+    longitude: number;
+    elevation: number;
+}
+
 export interface RouteDTO {
     distance: number;
     duration: number;
     ascent: number;
     descent: number;
-    steps: [number, number, number];
+    steps: StepDTO[];
+    coordinates: CoordinateDTO[][];
 }
 
 export interface RouteListDTO {
