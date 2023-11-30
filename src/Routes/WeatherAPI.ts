@@ -15,7 +15,7 @@ weatherRouter.get("/getWeatherInfo", async (req: Request, res: Response) => {
     const lat = req.query.lat;
     const lon = req.query.lon;
 
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}`;
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?units=metric&lat=${lat}&lon=${lon}&appid=${API_KEY}`;
     await axios.get(apiUrl)
         .then((res) => {
             RESULT_DATA.RESULT_DATA = res["data"]["weather"][0];
