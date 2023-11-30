@@ -1,6 +1,9 @@
 export interface RouteRequestDTO {
     congestion: number;
     transportation: number;
+    startCord: number;
+    endCord: number;
+    targetCount: number;
 }
 
 export interface RouteStepDTO {
