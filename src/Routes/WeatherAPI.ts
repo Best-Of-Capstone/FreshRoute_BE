@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import axios from "axios";
+import WeatherList from "../Utils/WeatherUtil";
 
 const weatherRouter = express.Router();
 
@@ -19,6 +20,10 @@ weatherRouter.get("/getWeatherInfo", async (req: Request, res: Response) => {
         .then((res) => {
             RESULT_DATA.RESULT_DATA = res["data"]["weather"][0];
             Object.assign(RESULT_DATA.RESULT_DATA, res["data"]["main"]);
+            Object.assign(RESULT_DATA.RESULT_DATA, {
+                // @ts-ignore
+                "weather_msg": WeatherList[res["data"]["weather"][0]["id"]]
+            });
 
             RESULT_DATA.RESULT_CODE = 200;
             RESULT_DATA.RESULT_MSG = "Success";
