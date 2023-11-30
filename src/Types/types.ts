@@ -1,3 +1,8 @@
+export interface RouteRequestDTO {
+    congestion: number;
+    transportation: number;
+}
+
 export interface RouteStepDTO {
     distance: number;
     duration: number;
