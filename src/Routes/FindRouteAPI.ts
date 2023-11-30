@@ -18,6 +18,18 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
         res.send(RESULT_DATA);
     }
 
+    if(requestData.congestion < -2 || requestData.congestion > 2){
+        RESULT_DATA.RESULT_CODE = 100;
+        RESULT_DATA.RESULT_MSG = "Congestion Parameter Error";
+        res.send(RESULT_DATA);
+    }
+
+    if(requestData.transportation < 0 || requestData.transportation > 2){
+        RESULT_DATA.RESULT_CODE = 100;
+        RESULT_DATA.RESULT_MSG = "Transportation Parameter Error";
+        res.send(RESULT_DATA);
+    }
+
     const transportURL: string = "https://asia-northeast3-spring-market-404709.cloudfunctions.net/function-2"
     const coordinatesList: [number, number][] = [];
 
