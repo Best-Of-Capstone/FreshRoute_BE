@@ -36,40 +36,50 @@ const findWalkRoute = async (body: any): Promise<ResultMSGDTO> => {
     RESULT_DATA["RESULT_MSG"] = routeMsg.statusText;
     try {
         if (routeMsg.status === 200) {
-            RESULT_DATA['RESULT_DATA'] = {
-                routeList: routeMsg.data.features.map(({
-                                                           geometry: geometry,
-                                                           properties: properties
-                                                       }: any, index: number) => {
-                    const detailRouteInfo = properties.segments[0];
-                    const elevationList = geometry.coordinates.map((coordinate: [number, number, number]) => {
-                        return coordinate[2];
-                    });
+            const routeList = await Promise.all(routeMsg.data.features.map(async ({
+                                                                                      geometry: geometry,
+                                                                                      properties: properties
+                                                                                  }: any, index: number) => {
+                const detailRouteInfo = properties.segments[0];
+                const elevationList = geometry.coordinates.map((coordinate: [number, number, number]) => {
+                    return coordinate[2];
+                });
+
+                const detailStepInfo = await Promise.all(detailRouteInfo.steps.map(async (step: RouteStepDTO) => {
+                    const [longitude, latitude] = geometry.coordinates[step.way_points[0]];
+                    const REVERSE_GEOCODING_URL: string = `https://api.vworld.kr/req/address?request=getAddress&` +
+                        `service=address&point=${longitude},${latitude}&` +
+                        `type=parcel&zipcode=false&key=${process.env.GEOCODING_KEY}`;
+                    const reverseGeocodeResultResponse = await axios.get(REVERSE_GEOCODING_URL);
+                    const textData = reverseGeocodeResultResponse.data.response?.result[0].text ?? "-";
                     return {
-                        id: index,
-                        description: `Route ${index}`,
-                        route: {
-                            distance: detailRouteInfo.distance,
-                            duration: detailRouteInfo.duration,
-                            ascent: properties.ascent,
-                            descent: properties.descent,
-                            steps: detailRouteInfo.steps.map((step: RouteStepDTO) => {
-                                return {
-                                    distance: step.distance,
-                                    duration: step.duration,
-                                    type: instructionTypes[step.type],
-                                    name: step.name,
-                                    elevationDelta: elevationList[step.way_points[1]] - elevationList[step.way_points[0]],
-                                    wayPoints: step.way_points,
-                                    isWalking: true,
-                                }
-                            }),
-                            coordinates: geometry.coordinates.map((coordinate: [number, number, number]) => {
-                                return [coordinate[1], coordinate[0], coordinate[2]];
-                            }),
-                        }
+                        distance: step.distance,
+                        duration: step.duration,
+                        type: instructionTypes[step.type],
+                        name: textData,
+                        elevationDelta: elevationList[step.way_points[1]] - elevationList[step.way_points[0]],
+                        wayPoints: step.way_points,
+                        isWalking: true,
                     }
-                }),
+                }));
+
+                return {
+                    id: index,
+                    description: `Route ${index}`,
+                    route: {
+                        distance: detailRouteInfo.distance,
+                        duration: detailRouteInfo.duration,
+                        ascent: properties.ascent,
+                        descent: properties.descent,
+                        steps: detailStepInfo,
+                        coordinates: geometry.coordinates.map((coordinate: [number, number, number]) => {
+                            return [coordinate[1], coordinate[0], coordinate[2]];
+                        }),
+                    }
+                }
+            }));
+            RESULT_DATA['RESULT_DATA'] = {
+                routeList: routeList
             }
         }
         return RESULT_DATA;
