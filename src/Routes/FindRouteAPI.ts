@@ -45,25 +45,23 @@ const findWalkRoute = async (body: any): Promise<ResultMSGDTO> => {
                     return coordinate[2];
                 });
 
-
                 const detailStepInfo = await Promise.all(detailRouteInfo.steps.map(async (step: RouteStepDTO) => {
                     const [longitude, latitude] = geometry.coordinates[step.way_points[0]];
                     const REVERSE_GEOCODING_URL: string = `https://api.vworld.kr/req/address?request=getAddress&` +
-                        `point=${longitude},${latitude}&` +
-                        `type=road&zipcode=false&key=${process.env.GEOCODING_KEY}`;
-                    const reverseGeocodeResult = await axios.get(REVERSE_GEOCODING_URL);
-                    console.dir(reverseGeocodeResult);
+                        `service=address&point=${longitude},${latitude}&` +
+                        `type=parcel&zipcode=false&key=${process.env.GEOCODING_KEY}`;
+                    const reverseGeocodeResultResponse = await axios.get(REVERSE_GEOCODING_URL);
+                    const textData = reverseGeocodeResultResponse.data.response?.result[0].text ?? "-";
                     return {
                         distance: step.distance,
                         duration: step.duration,
                         type: instructionTypes[step.type],
-                        name: step.name,
+                        name: textData,
                         elevationDelta: elevationList[step.way_points[1]] - elevationList[step.way_points[0]],
                         wayPoints: step.way_points,
                         isWalking: true,
                     }
                 }));
-
 
                 return {
                     id: index,
