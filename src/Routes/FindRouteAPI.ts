@@ -1,17 +1,26 @@
 import express, {Request, Response} from "express";
 import axios, {AxiosError} from "axios";
-import {ResultMSGDTO, RouteBodyDTO, RouteListDTO, RouteStepDTO, StepDTO} from "../Types/types";
+import {ResultMSGDTO, RouteBodyDTO, RouteListDTO, RouteRequestDTO, RouteStepDTO, StepDTO} from "../Types/types";
 
 const findRouteRouter = express.Router();
 
 findRouteRouter.post("/", async (req: Request, res: Response) => {
-    const transportURL: string = "https://asia-northeast3-spring-market-404709.cloudfunctions.net/function-2"
-    const coordinatesList: [number, number][] = [];
+    const requestData: RouteRequestDTO = req.body;
     const RESULT_DATA: ResultMSGDTO = {
         RESULT_CODE: 0,
         RESULT_MSG: "Ready",
         RESULT_DATA: {}
     }
+
+    if(requestData.congestion === undefined || requestData.transportation === undefined){
+        RESULT_DATA.RESULT_CODE = 100;
+        RESULT_DATA.RESULT_MSG = "Parameter Error";
+        res.send(RESULT_DATA);
+    }
+
+    const transportURL: string = "https://asia-northeast3-spring-market-404709.cloudfunctions.net/function-2"
+    const coordinatesList: [number, number][] = [];
+
     //weight_factor 1~2, share_factor 0.1~1
     const alternativeRoutesConfig: any = {
         "target_count": 3,
@@ -136,7 +145,7 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
     } catch (err) {
         if (err instanceof AxiosError) {
             RESULT_DATA["RESULT_CODE"] = err.response?.status ?? 404;
-            RESULT_DATA["RESULT_MSG"] = err.response?.data.error.message ?? "Internal Server Error";
+            RESULT_DATA["RESULT_MSG"] = err.response?.data ?? "Internal Server Error";
             res.send(RESULT_DATA);
         }
     }
