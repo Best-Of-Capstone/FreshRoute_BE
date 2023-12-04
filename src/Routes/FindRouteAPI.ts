@@ -64,7 +64,10 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
 
         const transportBODY = {
             "startCord": [req.body.startCord[0], req.body.startCord[1]],
-            "endCord": [req.body.endCord[0], req.body.endCord[1]]
+            "endCord": [req.body.endCord[0], req.body.endCord[1]],
+            "congestion": req.body.congestion,
+            "transportation": req.body.transportation,
+            "targetCount": req.body.targetCount
         }
         const transportData = await axios.post(transportURL, transportBODY);
         const tmpRouteList = transportData.data.data.RESULT_DATA.routeList;
