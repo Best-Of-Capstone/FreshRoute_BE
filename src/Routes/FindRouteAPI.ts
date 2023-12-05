@@ -102,11 +102,11 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
                 ];
                 // 시작점에서 대중교통 출발지까지 경로를 result_walk_first에 저장
                 walkBody["coordinates"] = [coordinatesList[0], [startTransport[1], startTransport[0]]];
-                const result_walk_first: ResultMSGDTO = await findWalkRoute(walkBody);
+                const result_walk_first: ResultMSGDTO = await findWalkRoute(walkBody, 1);
 
                 // 대중교통 도착지에서 도착지까지 경로를 result_walk_second에 저장
                 walkBody["coordinates"] = [[endTransport[1], endTransport[0]], coordinatesList[1]];
-                const result_walk_second: ResultMSGDTO = await findWalkRoute(walkBody);
+                const result_walk_second: ResultMSGDTO = await findWalkRoute(walkBody, 2);
 
                 if (result_walk_first.RESULT_CODE !== 200) {
                     res.send(result_walk_first);
@@ -132,9 +132,9 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
                                     transSteps.push({
                                         distance: transDistance,
                                         duration: transSectionTIme,
-                                        type: "도착",
+                                        type: "하차",
                                         isWalking: true,
-                                        name: "목적지 도착",
+                                        name: "버스 하차",
                                         elevationDelta: 0,
                                         wayPoints: [count, count + 1],
                                     });
@@ -219,11 +219,11 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
 
                 // 시작점에서 대중교통 출발지까지 경로를 result_walk_first에 저장
                 walkBody["coordinates"] = [coordinatesList[0], [startTransport[1], startTransport[0]]];
-                const result_walk_first: ResultMSGDTO = await findWalkRoute(walkBody);
+                const result_walk_first: ResultMSGDTO = await findWalkRoute(walkBody, 1);
 
                 // 대중교통 도착지에서 도착지까지 경로를 result_walk_second에 저장
                 walkBody["coordinates"] = [[endTransport[1], endTransport[0]], coordinatesList[1]];
-                const result_walk_second: ResultMSGDTO = await findWalkRoute(walkBody);
+                const result_walk_second: ResultMSGDTO = await findWalkRoute(walkBody, 2);
 
                 if (result_walk_first.RESULT_CODE !== 200) {
                     res.send(result_walk_first);
@@ -297,7 +297,7 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
     }
 });
 
-const findWalkRoute = async (body: any): Promise<ResultMSGDTO> => {
+const findWalkRoute = async (body: any, type: number): Promise<ResultMSGDTO> => {
     const instructionTypes = [
         "좌회전", //Left
         "우회전", //Right
@@ -362,6 +362,48 @@ const findWalkRoute = async (body: any): Promise<ResultMSGDTO> => {
                     }
                 }
             });
+            if (type === 1) {
+                for (const routeElement of routeList) {
+                    routeElement.route.steps.pop();
+                    const len = routeElement.route.steps.length;
+                    routeElement.route.steps[len - 1].wayPoints[1] = routeElement.route.steps[len - 1].wayPoints[1] + 1;
+                }
+            } else {
+                const lat1 = body.coordinates[0][1], lat2 = body.coordinates[1][1], lon1 = body.coordinates[0][0],
+                    lon2 = body.coordinates[1][0];
+                const R = 6371e3; // metres
+                const φ1 = lat1 * Math.PI / 180; // φ, λ in radians
+                const φ2 = lat2 * Math.PI / 180;
+                const Δφ = (lat2 - lat1) * Math.PI / 180;
+                const Δλ = (lon2 - lon1) * Math.PI / 180;
+
+                const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+                    Math.cos(φ1) * Math.cos(φ2) *
+                    Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+                const d = R * c; // in metres
+                for (const routeElement of routeList) {
+                    const len = routeElement.route.steps.length;
+                    const firstStepElement = routeElement.route.steps[0];
+                    firstStepElement.distance = d;
+                    firstStepElement.duration = 1;
+                    firstStepElement.type = "직진";
+                    firstStepElement.wayPoints[0] -= 1;
+
+                    routeElement.route.steps.push({
+                        distance: 0,
+                        duration: 0,
+                        type: '도착',
+                        isWalking: true,
+                        name: "목적지 도착",
+                        elevationDelta: 0,
+                        wayPoints: [len - 1, len],
+                    });
+                    routeElement.route.coordinates.push([body.coordinates[1][1], body.coordinates[1][0], 0]);
+                }
+            }
+
             RESULT_DATA['RESULT_DATA'] = {
                 routeList: routeList
             }
