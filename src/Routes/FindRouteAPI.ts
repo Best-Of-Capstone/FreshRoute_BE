@@ -70,86 +70,147 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
             "targetCount": req.body.targetCount
         }
         const transportData = await axios.post(transportURL, transportBODY);
-        const tmpRouteList = transportData.data.data.RESULT_DATA.routeList;
         const subResultData: RouteListDTO[] = [];
-        let index = 0;
-        for (const {route} of tmpRouteList) {
-            const {
-                coordinates: transCoordinates,
-                distance: transDistance,
-                duration: transDuration,
-                endTransport,
-                startTransport,
-                steps
-            } = route;
-            const transCoordinatesLength: number = transCoordinates.length;
-            transCoordinates.forEach((_: any, index: number, array: any) => {
-                array[index] = [array[index][1], array[index][0], 0];
-            });
-
-            // 시작점에서 대중교통 출발지까지 경로를 result_walk_first에 저장
-            walkBody["coordinates"] = [coordinatesList[0], [startTransport[1], startTransport[0]]];
-            const result_walk_first: ResultMSGDTO = await findWalkRoute(walkBody);
-
-            // 대중교통 도착지에서 도착지까지 경로를 result_walk_second에 저장
-            walkBody["coordinates"] = [[endTransport[1], endTransport[0]], coordinatesList[1]];
-            const result_walk_second: ResultMSGDTO = await findWalkRoute(walkBody);
-
-            if (result_walk_first.RESULT_CODE !== 200) {
-                res.send(result_walk_first);
-            }
-            if (result_walk_second.RESULT_CODE !== 200) {
-                res.send(result_walk_second);
-            }
-
-            result_walk_first.RESULT_DATA.routeList?.forEach(({route: routeListElementFirst}: RouteListDTO) => {
-                const firstCordLength: number = routeListElementFirst.coordinates.length;
-                result_walk_second.RESULT_DATA.routeList?.forEach(({route: routeListElementSecond}: RouteListDTO) => {
-                    const totalDistance: number = routeListElementFirst.distance + transDistance + routeListElementSecond.distance;
-                    const totalDuration: number = routeListElementFirst.duration + transDuration + routeListElementSecond.distance;
-                    const transSteps: StepDTO[] = steps.map((step: any): StepDTO => {
-                        return {
-                            distance: step.distance,
-                            duration: step.duration,
-                            name: step.name,
-                            type: step.type,
-                            wayPoints: [step.wayPoints[0] + firstCordLength, step.wayPoints[1] + firstCordLength],
-                            isWalking: false,
-                            elevationDelta: 0
-                        }
-                    });
-
-                    const routeListElementSecondSteps: StepDTO[] = routeListElementSecond.steps.map((step: StepDTO): StepDTO => {
-                        return {
-                            distance: step.distance,
-                            duration: step.duration,
-                            type: step.type,
-                            isWalking: step.isWalking,
-                            name: step.name,
-                            elevationDelta: step.elevationDelta,
-                            wayPoints: [
-                                step.wayPoints[0] + firstCordLength + transCoordinatesLength,
-                                step.wayPoints[1] + firstCordLength + transCoordinatesLength
-                            ]
-                        }
-                    });
-
-                    const subRouteList: RouteListDTO = {
-                        id: index,
-                        description: `Route ${index}`,
-                        route: {
-                            distance: totalDistance,
-                            duration: totalDuration,
-                            ascent: (routeListElementFirst.ascent + routeListElementSecond.ascent) / 2,
-                            descent: (routeListElementFirst.descent + routeListElementSecond.descent) / 2,
-                            coordinates: [...routeListElementFirst.coordinates, ...transCoordinates, ...routeListElementSecond.coordinates],
-                            steps: [...routeListElementFirst.steps, ...transSteps, ...routeListElementSecondSteps]
+        if (req.body.transportation === 1) { //bus == 1로 변경할 예정
+            const {endTransport, startTransport} = transportData.data.data.RESULT_DATA.routeList;
+            const busURL = `https://api.odsay.com/v1/api/searchPubTransPathT?` +
+                `SX=${startTransport[1]}&SY=${startTransport[0]}&` +
+                `EX=${endTransport[1]}&EY=${endTransport[0]}&` +
+                `SearchPathType=2&` + // 1 = subway, 2 = bus
+                `apiKey=${process.env.ODSAY_KEY}`;
+            const busData = await axios.get(busURL);
+            const tmpBustDataList = busData.data.result.path;
+            tmpBustDataList.forEach((path: any) => {
+                const {info, subPath} = path;
+                const transDistance = info.totalDistance;
+                const transDuration = info.totalTime;
+                const transSteps: StepDTO[] = [];
+                const subCord: [number, number, number][] = [];
+                for (const data of subPath) {
+                    if (data.trafficType == 2) {
+                        for (const passStopInfo of data.passStopList.stations) {
+                            const {y: latitude, x: longitude} = passStopInfo;
+                            subCord.push([parseFloat(latitude), parseFloat(longitude), 0]);
                         }
                     }
-                    subResultData.push(subRouteList);
-                    index++;
-                });
+                }
+                const transCoordinates: any = [
+                    [...startTransport, 0],
+                    ...subCord,
+                    [...endTransport, 0]
+                ];
+                // subPath.forEach((data: any) => {
+                //     console.dir(data);
+                //     if (data.trafficType == 2) {
+                //         console.dir(data.passStopList.stations);
+                //     }
+                //     console.log("---------\n");
+                // })
+                // subPath.forEach((data: any) => {
+                //     const {trafficType, distance: transDistance, sectionTime: transSectionTIme} = data;
+                //     if (trafficType == 3) {
+                //         transSteps.push({
+                //             distance: transDistance,
+                //             duration: transSectionTIme,
+                //             type: string;
+                //             isWalking: boolean;
+                //             name: string;
+                //             elevationDelta: number;
+                //             wayPoints: [number, number];
+                //         });
+                //     }
+                // });
+                console.log("-------------\n\n\n\n\n")
             });
+            // for (const {path} of tmpBustDataList) {
+            //     console.dir(path);
+            //     console.log("---");
+            //     // const {info, subPath} = path;
+            //     // const tmpRouteList = transportData.data.data.RESULT_DATA.routeList;
+            //     // const transDistance = info.totalDistance;
+            //     // const transDuration = info.totalTime;
+            // }
+        } else {
+            const tmpRouteList = transportData.data.data.RESULT_DATA.routeList;
+            let index = 0;
+            for (const {route} of tmpRouteList) {
+                const {
+                    coordinates: transCoordinates,
+                    distance: transDistance,
+                    duration: transDuration,
+                    endTransport,
+                    startTransport,
+                    steps
+                } = route;
+                const transCoordinatesLength: number = transCoordinates.length;
+                transCoordinates.forEach((_: any, index: number, array: any) => {
+                    array[index] = [array[index][1], array[index][0], 0];
+                });
+
+                // 시작점에서 대중교통 출발지까지 경로를 result_walk_first에 저장
+                walkBody["coordinates"] = [coordinatesList[0], [startTransport[1], startTransport[0]]];
+                const result_walk_first: ResultMSGDTO = await findWalkRoute(walkBody);
+
+                // 대중교통 도착지에서 도착지까지 경로를 result_walk_second에 저장
+                walkBody["coordinates"] = [[endTransport[1], endTransport[0]], coordinatesList[1]];
+                const result_walk_second: ResultMSGDTO = await findWalkRoute(walkBody);
+
+                if (result_walk_first.RESULT_CODE !== 200) {
+                    res.send(result_walk_first);
+                }
+                if (result_walk_second.RESULT_CODE !== 200) {
+                    res.send(result_walk_second);
+                }
+
+                result_walk_first.RESULT_DATA.routeList?.forEach(({route: routeListElementFirst}: RouteListDTO) => {
+                    const firstCordLength: number = routeListElementFirst.coordinates.length;
+                    result_walk_second.RESULT_DATA.routeList?.forEach(({route: routeListElementSecond}: RouteListDTO) => {
+                        const totalDistance: number = routeListElementFirst.distance + transDistance + routeListElementSecond.distance;
+                        const totalDuration: number = routeListElementFirst.duration + transDuration + routeListElementSecond.distance;
+                        const transSteps: StepDTO[] = steps.map((step: any): StepDTO => {
+                            return {
+                                distance: step.distance,
+                                duration: step.duration,
+                                name: step.name,
+                                type: step.type,
+                                wayPoints: [step.wayPoints[0] + firstCordLength, step.wayPoints[1] + firstCordLength],
+                                isWalking: false,
+                                elevationDelta: 0
+                            }
+                        });
+
+                        const routeListElementSecondSteps: StepDTO[] = routeListElementSecond.steps.map((step: StepDTO): StepDTO => {
+                            return {
+                                distance: step.distance,
+                                duration: step.duration,
+                                type: step.type,
+                                isWalking: step.isWalking,
+                                name: step.name,
+                                elevationDelta: step.elevationDelta,
+                                wayPoints: [
+                                    step.wayPoints[0] + firstCordLength + transCoordinatesLength,
+                                    step.wayPoints[1] + firstCordLength + transCoordinatesLength
+                                ]
+                            }
+                        });
+
+                        const subRouteList: RouteListDTO = {
+                            id: index,
+                            description: `Route ${index}`,
+                            route: {
+                                distance: totalDistance,
+                                duration: totalDuration,
+                                ascent: (routeListElementFirst.ascent + routeListElementSecond.ascent) / 2,
+                                descent: (routeListElementFirst.descent + routeListElementSecond.descent) / 2,
+                                coordinates: [...routeListElementFirst.coordinates, ...transCoordinates, ...routeListElementSecond.coordinates],
+                                steps: [...routeListElementFirst.steps, ...transSteps, ...routeListElementSecondSteps]
+                            }
+                        }
+                        subResultData.push(subRouteList);
+                        index++;
+                    });
+                });
+            }
         }
         RESULT_DATA.RESULT_CODE = 200;
         RESULT_DATA.RESULT_MSG = "Success";
