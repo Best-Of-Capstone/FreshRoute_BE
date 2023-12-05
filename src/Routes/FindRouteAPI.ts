@@ -80,7 +80,7 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
                 `apiKey=${process.env.ODSAY_KEY}`;
             const busData = await axios.get(busURL);
             const tmpBustDataList = busData.data.result.path;
-            tmpBustDataList.forEach((path: any) => {
+            for (const path of tmpBustDataList) {
                 const {info, subPath} = path;
                 const transDistance = info.totalDistance;
                 const transDuration = info.totalTime;
@@ -99,29 +99,57 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
                     ...subCord,
                     [...endTransport, 0]
                 ];
-                // subPath.forEach((data: any) => {
-                //     console.dir(data);
-                //     if (data.trafficType == 2) {
-                //         console.dir(data.passStopList.stations);
-                //     }
-                //     console.log("---------\n");
-                // })
-                // subPath.forEach((data: any) => {
-                //     const {trafficType, distance: transDistance, sectionTime: transSectionTIme} = data;
-                //     if (trafficType == 3) {
-                //         transSteps.push({
-                //             distance: transDistance,
-                //             duration: transSectionTIme,
-                //             type: string;
-                //             isWalking: boolean;
-                //             name: string;
-                //             elevationDelta: number;
-                //             wayPoints: [number, number];
-                //         });
-                //     }
-                // });
+                let count = 0;
+                console.log(transCoordinates.length);
+                for (let i = 0; i < subPath.length; i++) {
+                    const data = subPath[i];
+                    const {trafficType, distance: transDistance, sectionTime: transSectionTIme} = data;
+                    if (trafficType == 3) {
+                        const possibleLane = subPath[i + 1]?.lane.map((laneObj: any) => {
+                            return laneObj.busNo;
+                        });
+                        if (possibleLane === undefined) {
+                            transSteps.push({
+                                distance: transDistance,
+                                duration: transSectionTIme,
+                                type: "도착",
+                                isWalking: true,
+                                name: "목적지 도착",
+                                elevationDelta: 0,
+                                wayPoints: [count, count + 1],
+                            });
+                        } else {
+                            transSteps.push({
+                                distance: transDistance,
+                                duration: transSectionTIme,
+                                type: `${possibleLane.join()} 으로 환승`,
+                                isWalking: true,
+                                name: subPath[i + 1].startName,
+                                elevationDelta: 0,
+                                wayPoints: [count, count + 1]
+                            });
+                            count += 1;
+                        }
+                    } else {
+                        const possibleLane = subPath[i]["lane"].map((laneObj: any) => {
+                            return laneObj.busNo;
+                        });
+                        const busStop = subPath[i].passStopList.stations;
+                        transSteps.push({
+                            distance: transDistance,
+                            duration: transSectionTIme,
+                            type: `${possibleLane.join()} 버스 탑승`,
+                            isWalking: false,
+                            name: `${subPath[i].startName}에서 ${subPath[i].endName} 까지 버스 탑승`,
+                            elevationDelta: 0,
+                            wayPoints: [count, count + busStop.length - 1],
+                        });
+                        count += busStop.length - 1;
+                    }
+                }
+                console.dir(transSteps);
                 console.log("-------------\n\n\n\n\n")
-            });
+            }
             // for (const {path} of tmpBustDataList) {
             //     console.dir(path);
             //     console.log("---");
