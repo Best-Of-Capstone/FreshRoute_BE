@@ -71,6 +71,7 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
         }
         const transportData = await axios.post(transportURL, transportBODY);
         const subResultData: RouteListDTO[] = [];
+        let index = 0;
         if (req.body.transportation === 1) { //bus == 1로 변경할 예정
             const {endTransport, startTransport} = transportData.data.data.RESULT_DATA.routeList;
             const busURL = `https://api.odsay.com/v1/api/searchPubTransPathT?` +
@@ -79,11 +80,11 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
                 `SearchPathType=2&` + // 1 = subway, 2 = bus
                 `apiKey=${process.env.ODSAY_KEY}`;
             const busData = await axios.get(busURL);
-            const tmpBustDataList = busData.data.result.path;
+            const tmpBustDataList = busData.data.result.path.slice(0, 3);
             for (const path of tmpBustDataList) {
                 const {info, subPath} = path;
-                const transDistance = info.totalDistance;
-                const transDuration = info.totalTime;
+                const totalTransDistance = info.totalDistance;
+                const totalTransDuration = info.totalTime;
                 const transSteps: StepDTO[] = [];
                 const subCord: [number, number, number][] = [];
                 for (const data of subPath) {
@@ -99,65 +100,106 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
                     ...subCord,
                     [...endTransport, 0]
                 ];
-                let count = 0;
-                console.log(transCoordinates.length);
-                for (let i = 0; i < subPath.length; i++) {
-                    const data = subPath[i];
-                    const {trafficType, distance: transDistance, sectionTime: transSectionTIme} = data;
-                    if (trafficType == 3) {
-                        const possibleLane = subPath[i + 1]?.lane.map((laneObj: any) => {
-                            return laneObj.busNo;
-                        });
-                        if (possibleLane === undefined) {
-                            transSteps.push({
-                                distance: transDistance,
-                                duration: transSectionTIme,
-                                type: "도착",
-                                isWalking: true,
-                                name: "목적지 도착",
-                                elevationDelta: 0,
-                                wayPoints: [count, count + 1],
-                            });
-                        } else {
-                            transSteps.push({
-                                distance: transDistance,
-                                duration: transSectionTIme,
-                                type: `${possibleLane.join()} 으로 환승`,
-                                isWalking: true,
-                                name: subPath[i + 1].startName,
-                                elevationDelta: 0,
-                                wayPoints: [count, count + 1]
-                            });
-                            count += 1;
+                // 시작점에서 대중교통 출발지까지 경로를 result_walk_first에 저장
+                walkBody["coordinates"] = [coordinatesList[0], [startTransport[1], startTransport[0]]];
+                const result_walk_first: ResultMSGDTO = await findWalkRoute(walkBody);
+
+                // 대중교통 도착지에서 도착지까지 경로를 result_walk_second에 저장
+                walkBody["coordinates"] = [[endTransport[1], endTransport[0]], coordinatesList[1]];
+                const result_walk_second: ResultMSGDTO = await findWalkRoute(walkBody);
+
+                if (result_walk_first.RESULT_CODE !== 200) {
+                    res.send(result_walk_first);
+                }
+                if (result_walk_second.RESULT_CODE !== 200) {
+                    res.send(result_walk_second);
+                }
+                for (const {route: routeListElementFirst} of result_walk_first.RESULT_DATA.routeList!) {
+                    const firstCordLength: number = routeListElementFirst.coordinates.length;
+                    for (const {route: routeListElementSecond} of result_walk_second.RESULT_DATA.routeList!) {
+                        const totalDistance: number = routeListElementFirst.distance + totalTransDistance + routeListElementSecond.distance;
+                        const totalDuration: number = routeListElementFirst.duration + totalTransDuration + routeListElementSecond.distance;
+
+                        let count = firstCordLength;
+                        for (let i = 0; i < subPath.length; i++) {
+                            const data = subPath[i];
+                            const {trafficType, distance: transDistance, sectionTime: transSectionTIme} = data;
+                            if (trafficType == 3) {
+                                const possibleLane = subPath[i + 1]?.lane.map((laneObj: any) => {
+                                    return laneObj.busNo;
+                                });
+                                if (possibleLane === undefined) {
+                                    transSteps.push({
+                                        distance: transDistance,
+                                        duration: transSectionTIme,
+                                        type: "도착",
+                                        isWalking: true,
+                                        name: "목적지 도착",
+                                        elevationDelta: 0,
+                                        wayPoints: [count, count + 1],
+                                    });
+                                } else {
+                                    transSteps.push({
+                                        distance: transDistance,
+                                        duration: transSectionTIme,
+                                        type: `${possibleLane.join()} 으로 환승`,
+                                        isWalking: true,
+                                        name: subPath[i + 1].startName,
+                                        elevationDelta: 0,
+                                        wayPoints: [count, count + 1]
+                                    });
+                                    count += 1;
+                                }
+                            } else {
+                                const possibleLane = subPath[i]["lane"].map((laneObj: any) => {
+                                    return laneObj.busNo;
+                                });
+                                const busStop = subPath[i].passStopList.stations;
+                                transSteps.push({
+                                    distance: transDistance,
+                                    duration: transSectionTIme,
+                                    type: `${possibleLane.join()} 버스 탑승`,
+                                    isWalking: false,
+                                    name: `${subPath[i].startName}에서 ${subPath[i].endName} 까지 버스 탑승`,
+                                    elevationDelta: 0,
+                                    wayPoints: [count, count + busStop.length - 1],
+                                });
+                                count += busStop.length - 1;
+                            }
                         }
-                    } else {
-                        const possibleLane = subPath[i]["lane"].map((laneObj: any) => {
-                            return laneObj.busNo;
+
+                        const routeListElementSecondSteps: StepDTO[] = routeListElementSecond.steps.map((step: StepDTO): StepDTO => {
+                            return {
+                                distance: step.distance,
+                                duration: step.duration,
+                                type: step.type,
+                                isWalking: step.isWalking,
+                                name: step.name,
+                                elevationDelta: step.elevationDelta,
+                                wayPoints: [
+                                    step.wayPoints[0] + firstCordLength + transCoordinates.length,
+                                    step.wayPoints[1] + firstCordLength + transCoordinates.length
+                                ]
+                            }
                         });
-                        const busStop = subPath[i].passStopList.stations;
-                        transSteps.push({
-                            distance: transDistance,
-                            duration: transSectionTIme,
-                            type: `${possibleLane.join()} 버스 탑승`,
-                            isWalking: false,
-                            name: `${subPath[i].startName}에서 ${subPath[i].endName} 까지 버스 탑승`,
-                            elevationDelta: 0,
-                            wayPoints: [count, count + busStop.length - 1],
-                        });
-                        count += busStop.length - 1;
+
+                        const subRouteList: RouteListDTO = {
+                            id: index,
+                            description: `Route ${index}`,
+                            route: {
+                                distance: totalDistance,
+                                duration: totalDuration,
+                                ascent: (routeListElementFirst.ascent + routeListElementSecond.ascent) / 2,
+                                descent: (routeListElementFirst.descent + routeListElementSecond.descent) / 2,
+                                coordinates: [...routeListElementFirst.coordinates, ...transCoordinates, ...routeListElementSecond.coordinates],
+                                steps: [...routeListElementFirst.steps, ...transSteps, ...routeListElementSecondSteps]
+                            }
+                        }
+                        subResultData.push(subRouteList);
+                        index++;
                     }
                 }
-                console.dir(transSteps);
-                console.log("-------------\n\n\n\n\n")
             }
-            // for (const {path} of tmpBustDataList) {
-            //     console.dir(path);
-            //     console.log("---");
-            //     // const {info, subPath} = path;
-            //     // const tmpRouteList = transportData.data.data.RESULT_DATA.routeList;
-            //     // const transDistance = info.totalDistance;
-            //     // const transDuration = info.totalTime;
-            // }
         } else {
             const tmpRouteList = transportData.data.data.RESULT_DATA.routeList;
             let index = 0;
