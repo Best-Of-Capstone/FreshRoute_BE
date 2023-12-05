@@ -142,7 +142,7 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
                                     transSteps.push({
                                         distance: transDistance,
                                         duration: transSectionTIme,
-                                        type: `${possibleLane.join()} 으로 탑승`,
+                                        type: `${subPath[i + 1].startName}정류장으로 이동`,
                                         isWalking: true,
                                         name: subPath[i + 1].startName,
                                         elevationDelta: 0,
