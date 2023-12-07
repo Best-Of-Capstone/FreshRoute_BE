@@ -72,7 +72,7 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
         const transportData = await axios.post(transportURL, transportBODY);
         const subResultData: RouteListDTO[] = [];
         let index = 0;
-        if (req.body.transportation === 1) { //bus == 1로 변경할 예정
+        if (req.body.transportation === 1) {
             const {endTransport, startTransport} = transportData.data.data.RESULT_DATA.routeList;
             const busURL = `https://api.odsay.com/v1/api/searchPubTransPathT?` +
                 `SX=${startTransport[1]}&SY=${startTransport[0]}&` +
@@ -391,16 +391,18 @@ const findWalkRoute = async (body: any, type: number): Promise<ResultMSGDTO> => 
                     firstStepElement.type = "직진";
                     firstStepElement.wayPoints[0] -= 1;
 
-                    routeElement.route.steps.push({
-                        distance: 0,
-                        duration: 0,
-                        type: '도착',
-                        isWalking: true,
-                        name: "목적지 도착",
-                        elevationDelta: 0,
-                        wayPoints: [len - 1, len],
-                    });
-                    routeElement.route.coordinates.push([body.coordinates[1][1], body.coordinates[1][0], 0]);
+                    if (len == 1) {
+                        routeElement.route.steps.push({
+                            distance: 0,
+                            duration: 0,
+                            type: '도착',
+                            isWalking: true,
+                            name: "목적지 도착",
+                            elevationDelta: 0,
+                            wayPoints: [len - 1, len],
+                        });
+                        routeElement.route.coordinates.push([body.coordinates[1][1], body.coordinates[1][0], 0]);
+                    }
                 }
             }
 
