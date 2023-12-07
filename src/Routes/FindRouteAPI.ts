@@ -72,7 +72,7 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
         const transportData = await axios.post(transportURL, transportBODY);
         const subResultData: RouteListDTO[] = [];
         let index = 0;
-        if (req.body.transportation === 1) { //bus == 1로 변경할 예정
+        if (req.body.transportation === 1) {
             const {endTransport, startTransport} = transportData.data.data.RESULT_DATA.routeList;
             const busURL = `https://api.odsay.com/v1/api/searchPubTransPathT?` +
                 `SX=${startTransport[1]}&SY=${startTransport[0]}&` +
@@ -372,14 +372,14 @@ const findWalkRoute = async (body: any, type: number): Promise<ResultMSGDTO> => 
                 const lat1 = body.coordinates[0][1], lat2 = body.coordinates[1][1], lon1 = body.coordinates[0][0],
                     lon2 = body.coordinates[1][0];
                 const R = 6371e3; // metres
-                const φ1 = lat1 * Math.PI / 180; // φ, λ in radians
-                const φ2 = lat2 * Math.PI / 180;
-                const Δφ = (lat2 - lat1) * Math.PI / 180;
-                const Δλ = (lon2 - lon1) * Math.PI / 180;
+                const pi1 = lat1 * Math.PI / 180; // φ, λ in radians
+                const pi2 = lat2 * Math.PI / 180;
+                const deltaPi = (lat2 - lat1) * Math.PI / 180;
+                const deltaLambda = (lon2 - lon1) * Math.PI / 180;
 
-                const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-                    Math.cos(φ1) * Math.cos(φ2) *
-                    Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+                const a = Math.sin(deltaPi / 2) * Math.sin(deltaPi / 2) +
+                    Math.cos(pi1) * Math.cos(pi2) *
+                    Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
                 const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
                 const d = R * c; // in metres
@@ -391,16 +391,18 @@ const findWalkRoute = async (body: any, type: number): Promise<ResultMSGDTO> => 
                     firstStepElement.type = "직진";
                     firstStepElement.wayPoints[0] -= 1;
 
-                    routeElement.route.steps.push({
-                        distance: 0,
-                        duration: 0,
-                        type: '도착',
-                        isWalking: true,
-                        name: "목적지 도착",
-                        elevationDelta: 0,
-                        wayPoints: [len - 1, len],
-                    });
-                    routeElement.route.coordinates.push([body.coordinates[1][1], body.coordinates[1][0], 0]);
+                    if (len == 1) {
+                        routeElement.route.steps.push({
+                            distance: 0,
+                            duration: 0,
+                            type: '도착',
+                            isWalking: true,
+                            name: "목적지 도착",
+                            elevationDelta: 0,
+                            wayPoints: [len - 1, len],
+                        });
+                        routeElement.route.coordinates.push([body.coordinates[1][1], body.coordinates[1][0], 0]);
+                    }
                 }
             }
 
