@@ -85,7 +85,6 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
                 const {info, subPath} = path;
                 const totalTransDistance = info.totalDistance;
                 const totalTransDuration = info.totalTime;
-                const transSteps: StepDTO[] = [];
                 const subCord: [number, number, number][] = [];
                 for (const data of subPath) {
                     if (data.trafficType == 2) {
@@ -119,7 +118,7 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
                     for (const {route: routeListElementSecond} of result_walk_second.RESULT_DATA.routeList!) {
                         const totalDistance: number = routeListElementFirst.distance + totalTransDistance + routeListElementSecond.distance;
                         const totalDuration: number = routeListElementFirst.duration + totalTransDuration + routeListElementSecond.distance;
-
+                        const transSteps: StepDTO[] = [];
                         let count = firstCordLength;
                         for (let i = 0; i < subPath.length; i++) {
                             const data = subPath[i];
