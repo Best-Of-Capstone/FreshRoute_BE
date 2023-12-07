@@ -372,14 +372,14 @@ const findWalkRoute = async (body: any, type: number): Promise<ResultMSGDTO> => 
                 const lat1 = body.coordinates[0][1], lat2 = body.coordinates[1][1], lon1 = body.coordinates[0][0],
                     lon2 = body.coordinates[1][0];
                 const R = 6371e3; // metres
-                const φ1 = lat1 * Math.PI / 180; // φ, λ in radians
-                const φ2 = lat2 * Math.PI / 180;
-                const Δφ = (lat2 - lat1) * Math.PI / 180;
-                const Δλ = (lon2 - lon1) * Math.PI / 180;
+                const pi1 = lat1 * Math.PI / 180; // φ, λ in radians
+                const pi2 = lat2 * Math.PI / 180;
+                const deltaPi = (lat2 - lat1) * Math.PI / 180;
+                const deltaLambda = (lon2 - lon1) * Math.PI / 180;
 
-                const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-                    Math.cos(φ1) * Math.cos(φ2) *
-                    Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+                const a = Math.sin(deltaPi / 2) * Math.sin(deltaPi / 2) +
+                    Math.cos(pi1) * Math.cos(pi2) *
+                    Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
                 const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
                 const d = R * c; // in metres
