@@ -22,7 +22,7 @@ weatherRouter.get("/getWeatherInfo", async (req: Request, res: Response) => {
             Object.assign(RESULT_DATA.RESULT_DATA, res["data"]["main"]);
             Object.assign(RESULT_DATA.RESULT_DATA, {
                 // @ts-ignore
-                "weather_msg": WeatherList[`${(res["data"]["weather"][0]["id"] / 100).toFixed()}`].toString()
+                "weather_msg": WeatherList[`${(res["data"]["weather"][0]["id"] / 100).toFixed()}`]
             });
 
             RESULT_DATA.RESULT_CODE = 200;
