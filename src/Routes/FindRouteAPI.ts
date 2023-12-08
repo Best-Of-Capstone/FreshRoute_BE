@@ -41,8 +41,12 @@ findRouteRouter.post("/", async (req: Request, res: Response) => {
     };
 
     alternativeRoutesConfig["target_count"] = req.body?.targetCount ?? alternativeRoutesConfig["target_count"];
-    alternativeRoutesConfig["weight_factor"] = req.body?.targetCount ?? alternativeRoutesConfig["weight_factor"];
-    alternativeRoutesConfig["share_factor"] = req.body?.targetCount ?? alternativeRoutesConfig["share_factor"];
+    alternativeRoutesConfig["weight_factor"] = req.body?.weightFactor ?? alternativeRoutesConfig["weight_factor"];
+    alternativeRoutesConfig["share_factor"] = req.body?.shareFactor ?? alternativeRoutesConfig["share_factor"];
+
+    if (alternativeRoutesConfig["target_count"] > 3) {
+        alternativeRoutesConfig["target_count"] = 3;
+    }
 
     if (req.body?.startCord === undefined || req.body?.endCord === undefined) {
         RESULT_DATA['RESULT_CODE'] = 400;
